@@ -19,3 +19,10 @@
  - [ ] ferire sfaturi de micsorare a consumului
  - [ ] Detectarea valorilor anormale a device-urilor
  - [ ] Interactiune automata - inchidere si pornirea device-urilor in functie de setarile utilizatorului (Ex: 20 min dupa plecarea din locuinta, inchidem aer conditionat, Ora 16:30 pornim centrala termica)
+
+### Echipa
+ - Darius Buhai
+ - Savu Ioan Daniel
+ - Alexandra Bulaceanu
+ - Rusu Andrei Cristian
+ - Mitoi Stefan-Daniel
