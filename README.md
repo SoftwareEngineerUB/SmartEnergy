@@ -23,11 +23,6 @@ Astfel, device-ul se bazeaza pe generarea de informatii ce permit utilizatorului
 
 ### Colectarea cerințelor
 
- - [ ] Initializare Proiect
- - [ ] Initializare hosting
- - [ ] Initializare baza de date
- - [ ] Implementare Flask MQTT
- - [ ] Initializare teste automate
  - [ ] Detectarea valorilor anormale a device-urilor
  - [ ] Interactiune automata - inchidere si pornirea device-urilor in functie de setarile utilizatorului
  - [ ] Preluare date device-uri
