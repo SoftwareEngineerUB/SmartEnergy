@@ -29,6 +29,9 @@ Astfel, device-ul se bazeaza pe generarea de informatii ce permit utilizatorului
  - [ ] Monitorizarea consumului device-urilor conectate
  - [ ] Alertarea utilizatorilor asupra utilizarii energiei in mod ineficient.
  - [ ] Sfaturi de micsorare a consumului
+ 
+### Prioritatea cerințelor
+![alt text](https://github.com/SoftwareEngineerUB/SmartEnergy/blob/main/tasks.png)
 
 ### Echipa
  - Darius Buhai
