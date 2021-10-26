@@ -99,3 +99,4 @@ Automatic interaction - cerinte ce includ detectarea si interactiunea automata
  - Alexandra Bulaceanu
  - Rusu Andrei Cristian
  - Mitoi Stefan-Daniel
+ - Stanciu Andrei-Calin
