@@ -2,16 +2,19 @@
 
 ### Scopul aplicației: 
 
-*In contextul actualei crize de mediu si al incalzirii globale dorim eficientizarea consumului de energiei pentru a contribui la elminarea poluarii. Astfel, echipa noastra propune un program IOT al carui scop este de a interactiona cu device-urile smart dintr-o locuinta pentru a eficientiza energia consumata. In acest sens programul ar putea fi implementat pe o sursa smart de energie (sau pe distribuitori de energie precum un prelungitor) electrica unde ar urma sa comunice cu restul de device-uri smart cu scopul de a realiza statistici si a efectua actiuni ce vor diminua consumul de energie.*
+*În contextul actualei crize de mediu și al încălzirii globale dorim eficientizarea consumului de energiei pentru a contribui la eliminarea poluării. Astfel, echipa noastra propune un program IoT al cărui scop este de a interacționa cu device-urile smart dintr-o locuință pentru a eficientiza energia consumată. În acest sens programul ar putea fi implementat pe o sursa smart de energie (sau pe distribuitori de energie precum un prelungitor) electrica unde ar urma sa comunice cu restul de device-uri smart cu scopul de a realiza statistici și a efectua acțiuni ce vor diminua consumul de energie.*
 
 ### Obiectivele aplicației:
 
-*Un prim obiectiv in realizarea acestui program este acela de a crea endpointuri la care se pot conecta si trimite informatii senzorii de pe device (cei de intensitatea curentului si puterea folosita) si de endpointuri prin care acesta sa poata comunica cu obiectele smart pe care le alimenteaza. 
-Un alt obiectiv important este acela de a crea statistici pe baza datelor obtinute si de trimiterea lor ca raporte utilizatorului. De asemenea, se pot genera sugestii de reducere a consumului prin interpolarea statisticilor cu obiceiurile utilizatorului.*
+*Un prim obiectiv în realizarea acestui program este acela de a crea endpointuri la care se pot conecta și trimite informații senzorii de pe device (cei de intensitatea curentului și puterea folosită) și de endpointuri prin care acesta sa poată comunica cu obiectele smart pe care le alimentează.*
 
-*In continuarea functionalitatii de statistica, avem in obiectiv creearea de alerte prin care device-ul il poate instiinta pe utilizator de consumuri nedorite de energie, un exemplu fiind un device uitat pornit, si de a ii permite inchiderea acestora prin intreruperea curentului in porturile corespunzatoare.
-Un selling point al device-ului il poate forma si abilitatea de a detecta anomalii de consum, permitand astfel device-ului sa instiinteze utilizatorul despre functionarea inadecvata a echipamentelor sau despre posibilele pericole (un scurt, cabluri inadecvate, etc.)
-Astfel, device-ul se bazeaza pe generarea de informatii ce permit utilizatorului sa fie mai eficient in consumul de energie electrica si in acelasi timp sa previna diverse probleme ce pot aparea in functionarea acestora.*
+*Un alt obiectiv important este acela de a crea statistici pe baza datelor obținute și de trimiterea lor sub formă de rapoarte către utilizator. De asemenea, se pot genera sugestii de reducere a consumului prin interpolarea statisticilor cu obiceiurile utilizatorului.*
+
+*În continuarea funcționalității de statistica, avem în obiectiv crearea de alerte prin care device-ul îl poate înștiința pe utilizator de consumuri nedorite de energie, un exemplu fiind un device uitat pornit, și de a îi permite închiderea acestora prin întreruperea curentului în porturile corespunzătoare.*
+
+*Un selling point al device-ului îl poate forma și abilitatea de a detecta anomalii de consum, permitand astfel device-ului sa instiinteze utilizatorul despre funcționarea inadecvată a echipamentelor sau despre posibilele pericole (un scurtcircuit, cabluri inadecvate, etc.)*
+
+*Astfel, device-ul se bazează pe generarea de informații ce permit utilizatorului să fie mai eficient în consumul de energie electrică și în același timp să prevină diverse probleme ce pot apărea în funcționarea acestora.*
 
 ### Grupul țintă
 
@@ -21,15 +24,72 @@ Astfel, device-ul se bazeaza pe generarea de informatii ce permit utilizatorului
 
 *Pentru cei care doresc informatii mai detaliate despre obiceiurile lor de consum functiile de statistici si alerte le sunt foarte potrivite, avand posibilitatea de a-si invata propriile obiceiuri si de a analiza posibilele metode de reducere a consumului.*
 
+*În același timp, aceste tipuri de utilizatori beneficiază și de feature-ul răspunzător de pornirea și oprirea automată a diverșilor consumatori în funcție de momentul din zi în care se afla.*
+
+*De asemenea, identificăm un alt segment important și anume firmele, ce ar fi interesate îndeosebi de feature-urile de pornire/oprire automată a anumitor device-uri in functie de perioada corespunzatoare din zi și de statisticile de consum pentru a-și reduce costurile.*
+
 ### Colectarea cerințelor
 
- - [ ] Detectarea valorilor anormale a device-urilor
+ - [ ] Detectarea valorilor anormale a device-urilor 
  - [ ] Interactiune automata - inchidere si pornirea device-urilor in functie de setarile utilizatorului
- - [ ] Preluare date device-uri
  - [ ] Monitorizarea consumului device-urilor conectate
+ - [ ] Comunicarea dintre mai multe device-uri care se afla in aceeasi cladire 
  - [ ] Alertarea utilizatorilor asupra utilizarii energiei in mod ineficient.
+ - [ ] Interactiune automata - inchidere si pornirea device-urilor in functie de setarile utilizatorului 
  - [ ] Sfaturi de micsorare a consumului
- 
+ - [ ] Invatare automata a obiceiurilor utilizatorului pentru a interactiona cu device-urile si a reduce consumul
+ - [ ] Conectarea cu alte device-uri smart pentru a prelua informatii de utilizare a acestora
+ - [ ] Eficientizarea operatiilor pentru a reduce energia consumata de catre sursa
+
+### Interpretarea si prioritizarea cerintelor
+Cerinte functionale:
+* Detectarea valorilor anormale a device-urilor
+* Interactiune automata - inchidere si pornirea device-urilor in functie de setarile utilizatorului
+* Monitorizarea consumului device-urilor conectate
+* Alertarea utilizatorilor asupra utilizarii energiei in mod ineficient.
+* Sfaturi de micsorare a consumului
+
+Cerinte nefunctionale:
+* Comunicarea dintre mai multe device-uri care se afla in aceeasi cladire 
+* Conectarea cu alte device-uri smart pentru a prelua informatii de utilizare a acestora
+* Eficientizarea operatiilor pentru a reduce energia consumata de catre sursa
+* Invatare automata a obiceiurilor utilizatorului pentru a interactiona cu device-urile si a reduce consumul 
+
+### Gruparea cerintelor
+Devops - self-explanatory
+- Initializare Hosting
+- Initializare baza de date
+
+Data Transfer - cerinte ce tin de transmiterea, validarea si stocarea de date
+- Implementare Flask MQTT
+- Implementare Flask HTTP
+- Preluare date device-uri
+
+Data Processing - cerinte ce tin de prelucrarea si monitorizarea de date:
+- Detectarea valorilor anormale a device-urilor
+- Monitorizarea consumului device-urilor conectate 
+- Alertarea utilizatorilor asupra utilizarii energiei in mod ineficient
+
+Automatic interaction - cerinte ce includ detectarea si interactiunea automata 
+- Invatarea automata a obiceiurilor utilizatorului 
+- Detectarea valorilor anormale a device-urilor 
+- Alertarea utilizatoriilor asupra utilizarii energiei in mod ineficient
+
+
+### Planning Poker results
+
+| *P = Prioritate;  *D = Dificultate; 5 = max priority / dif                                                   | Johnny P/D | Alexandra P/D | Darius P/D | Ștefan P/D | Andrei P/D | Călin  P/D |
+|------------------------------------------------------------------------------------------------------------|:----------:|:-------------:|:----------:|:----------:|:----------:|:----------:|
+| Comunicarea dintre mai multe device-uri care se afla in aceeasi cladire                                    |     4/3    |      4/4      |     4/4    |     2/4    |     3/4    |     4/4    |
+| Invatare automata a obiceiurilor utilizatorului pentru a interactiona cu device-urile si a reduce consumul |     5/2    |      5/3      |     4/5    |     3/5    |     4/5    |     3/5    |
+| Conectarea cu alte device-uri smart pentru a prelua informatii de utilizare a acestora                     |     3/3    |      3/3      |     3/3    |     3/4    |     3/4    |     3/3    |
+| Eficientizarea operatiilor pentru a reduce energia consumata de catre sursa                                |     3/4    |      3/4      |     3/4    |     4/3    |     3/3    |     4/3    |
+| Detectarea valorilor anormale a device-urilor                                                              |     3/4    |      4/3      |     3/3    |     4/3    |     4/2    |     4/2    |
+| Interactiune automata - inchidere si pornirea device-urilor in functie de setarile utilizatorului          |     4/2    |      4/2      |     4/2    |     3/3    |     4/1    |     5/1    |
+| Monitorizarea consumului device-urilor conectate                                                           |     4/3    |      4/3      |     4/2    |     4/2    |     4/3    |     5/3    |
+| Alertarea utilizatorilor asupra utilizarii energiei in mod ineficient.                                     |     3/2    |      3/2      |     3/3    |     3/3    |     3/1    |     3/1    |
+| Sfaturi de micsorare a consumului                                                                          |     3/3    |      2/2      |     4/4    |     2/2    |     2/1    |     3/2    |
+
 ### Prioritatea cerințelor
 ![alt text](https://github.com/SoftwareEngineerUB/SmartEnergy/blob/main/tasks.png)
 
