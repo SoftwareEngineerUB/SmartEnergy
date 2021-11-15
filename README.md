@@ -100,3 +100,6 @@ Automatic interaction - cerinte ce includ detectarea si interactiunea automata
  - Rusu Andrei Cristian
  - Mitoi Stefan-Daniel
  - Stanciu Andrei-Calin
+
+### Link Aplicatie
+[https://smart-energy-ub.herokuapp.com/](https://smart-energy-ub.herokuapp.com/)
