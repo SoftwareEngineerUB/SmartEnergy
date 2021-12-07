@@ -1,0 +1,7 @@
+HomeA-meter3
+use [kW],gen [kW],ElectricRange [kW],Dryer [kW],GarageMudroomLights [kW],DiningRoomOutlets [kW],MudroomOutlets [kW],MasterBathOutlets [kW],GarageOutlets [kW],BasementOutdoorOutlets [kW]
+
+year:2016
+Duration:2016-01-01 00:00:00-2016-12-15 20:59:00
+Frequency:0 days 00:01:00
+

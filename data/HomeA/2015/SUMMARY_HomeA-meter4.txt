@@ -1,0 +1,7 @@
+HomeA-meter4
+use [kW],gen [kW],KitchenDenLights [kW],MasterBedBathLights [kW],MasterOutlets [kW],DenOutdoorLights [kW],DenOutlets [kW],RearBasementLights [kW],KitchenOutletsEast [kW],KitchenOutletsSouth [kW],DishwasherDisposalSinkLight [kW],Refrigerator [kW],Microwave [kW],OfficeLights [kW]
+
+year:2015
+Duration:2015-01-01 00:00:00-2015-12-31 23:45:00
+Frequency:0 days 00:15:00
+
