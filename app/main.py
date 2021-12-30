@@ -1,14 +1,12 @@
 from flask import Flask
-
-from flask_mqtt import Mqtt
-from flask_socketio import SocketIO
 from flask_migrate import Migrate
+from flask_socketio import SocketIO
+
 from app.models.db import db
 
-import time
-from threading import Thread
-
 # Instantiate Flask app
+from app.mqtt.server_demo import init_mqtt
+
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(SECRET_KEY='dev')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.sqlite'
@@ -24,18 +22,6 @@ app.config['MQTT_PASSWORD'] = ''  # set the password here if the broker demands 
 app.config['MQTT_KEEPALIVE'] = 5  # set the time interval for sending a ping to the broker to 5 seconds
 app.config['MQTT_TLS_ENABLED'] = False  # set TLS to disabled for testing purposes
 
-# Migrate database
-migrate = Migrate(app, db)
-
-# Initiate database
-db.init_app(app)
-db.create_all(app=app)
-migrate.init_app(app, db)
-
-# Initiate MQTT
-mqtt = Mqtt(app)
-socketio = SocketIO(app)
-
 
 # Index page
 @app.route('/')
@@ -43,14 +29,19 @@ def indexPage():
     return 'Hello World!'
 
 
-def init_mqtt_demo():
-    mqtt_publisher_thread = Thread(target=mqtt_demo_publisher, daemon=True)
-    mqtt_publisher_thread.start()
+# Initiate server
+def initiateServer():
+    # Migrate database
+    migrate = Migrate(app, db)
 
+    # Initiate database
+    db.init_app(app)
+    db.create_all(app=app)
+    migrate.init_app(app, db)
 
-def mqtt_demo_publisher():
-    _cnt = 0
-    while True:
-        mqtt.publish("python/mqtt/demo", f"published demo message {_cnt}".encode())
-        _cnt += 1
-        time.sleep(3)
+    # Initiate mqtt
+    # init_mqtt(app)
+
+    # Initiate socket IO app - flask
+    socketio = SocketIO(app)
+    socketio.run(app, host='localhost', port=5000, use_reloader=False, debug=True)
