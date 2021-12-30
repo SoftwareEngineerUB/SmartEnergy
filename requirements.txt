@@ -27,3 +27,5 @@ xml-python==0.4.3
 beautifulsoup4==4.10.0
 pyvirtualdisplay==2.2
 imgkit==1.2.2
+Flask-MQTT==1.1.1
+Flask-SocketIO==5.1.1
