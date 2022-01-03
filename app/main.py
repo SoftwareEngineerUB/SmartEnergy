@@ -11,10 +11,12 @@ app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(SECRET_KEY='dev')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.sqlite'
 
+
 # Index page
 @app.route('/')
 def indexPage():
     return 'Hello World!'
+
 
 # Initiate server
 def initiateServer():

@@ -1,9 +1,9 @@
 import time
 from threading import Thread
-import json
 
 from flask import Flask
 from flask_mqtt import Mqtt
+
 
 class FlaskClient:
     """The mqtt client associated with the flask webserver\n
@@ -15,14 +15,13 @@ class FlaskClient:
 
         cnt = 0
         while True:
-
             mqtt_app.publish("python/mqtt/demo", f"published demo message {cnt}".encode())
 
             cnt += 1
             time.sleep(3)
-    
+
     def __init__(self, app: Flask, config):
-        
+
         self.config = config
 
         try:

@@ -1,12 +1,12 @@
 from subprocess import Popen
 from time import sleep
 
-class Broker:
 
+class Broker:
     START_DELAY = 0.5
 
     def __init__(self, config):
-        
+
         try:
             self.broker_proc = Popen(["mosquitto", "-p", f"{config['broker_port']}"])
             sleep(Broker.START_DELAY)
