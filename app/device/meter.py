@@ -5,8 +5,9 @@ import uuid
 
 import dateutil.parser
 from matplotlib import pyplot as plt
-from app.models import Data, Device
+from app.models import Data, Device, User
 from app.models.db import db
+
 
 class MeterData:
     def __init__(self):
@@ -17,24 +18,24 @@ class MeterData:
 
 
 class Meter:
-
     DATE_TIME_KEY = 'Date & Time'
     IGNORED_KEYS = ['use [kW]', 'gen [kW]', DATE_TIME_KEY]
 
-    def __init__(self, year=2016, meter_id=1):
+    def __init__(self, user: User, year=2016, meter_id=1):
+        self.user = user
+        self.year = year
+        self.meter_id = 1
         self.data = MeterData()
-        self.loadData(year, meter_id)
 
-    @staticmethod
-    def load_data(user, year, meter_id):
+    def exportToDatabase(self):
         devices = dict()
 
-        with open(f"data/{year}/meter{meter_id}.csv", "r") as f:
+        with open(f"data/{self.year}/meter{self.meter_id}.csv", "r") as f:
             file_contents = csv.DictReader(f)
 
             for field in file_contents.fieldnames:
                 if field not in Meter.IGNORED_KEYS:
-                    device = db.session.query(Device).filter_by(user_id=user.id, alias=field).first()
+                    device = db.session.query(Device).filter_by(user_id=self.user.id, alias=field).first()
                     if device is None:
                         device = Device(
                             alias=field,
@@ -42,7 +43,7 @@ class Meter:
                             description=field + ' mock device',
                             status=True,
                             settings=dict(),
-                            user_id=user.id,
+                            user_id=self.user.id,
                         )
                         db.session.add(device)
                     devices[field] = device
@@ -58,34 +59,6 @@ class Meter:
 
             db.session.commit()
 
-    def loadData(self, year, meter_id):
-        pickle_file_path = f'data/pickles/{year}_{meter_id}.pkl'
-        try:
-            if os.path.exists(pickle_file_path):
-                dbfile = open(pickle_file_path, 'rb')
-                self.data = pickle.load(dbfile)
-                dbfile.close()
-                return
-        except Exception as e:
-            print(e)
-            pass
-        with open(f"data/{year}/meter{meter_id}.csv", "r") as f:
-            file_contents = csv.DictReader(f)
-            for row in file_contents:
-                self.data.all.append(row)
-                date = dateutil.parser.parse(row[self.DATE_TIME_KEY])
-                self.data.by_date[str(date)] = row
-                for key in row.keys():
-                    if key not in self.data.by_key.keys():
-                        self.data.by_key[key] = list()
-                    self.data.by_key[key].append(row[key])
-            if len(self.data.all) > 0:
-                self.data.keys = list(self.data.all[0].keys())
-
-        dbfile = open(pickle_file_path, 'ab')
-        pickle.dump(self.data, dbfile)
-        dbfile.close()
-
     def plotKey(self, key):
         if key not in self.data.keys:
             return
@@ -99,5 +72,4 @@ class Meter:
 
 
 if __name__ == "__main__":
-    meter = Meter()
-    # meter.plotKey("FurnaceHRV [kW]")
+    pass

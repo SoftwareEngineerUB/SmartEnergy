@@ -1,4 +1,4 @@
-from app.main import initiate_server
+from app.main import initiateFlask
 
 if __name__ == "__main__":
-    initiate_server()
+    initiateFlask()
