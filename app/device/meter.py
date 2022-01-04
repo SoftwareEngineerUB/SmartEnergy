@@ -1,6 +1,4 @@
 import csv
-import os
-import pickle
 import uuid
 
 import dateutil.parser
@@ -20,6 +18,7 @@ class MeterData:
 class Meter:
     DATE_TIME_KEY = 'Date & Time'
     IGNORED_KEYS = ['use [kW]', 'gen [kW]', DATE_TIME_KEY]
+    EXPORT_ROW_COMMIT_SPLIT = 1000
 
     def __init__(self, user: User, year=2016, meter_id=1):
         self.user = user
@@ -39,7 +38,7 @@ class Meter:
                     if device is None:
                         device = Device(
                             alias=field,
-                            uuid=uuid.uuid4(),
+                            uuid=str(uuid.uuid4()),
                             description=field + ' mock device',
                             status=True,
                             settings=dict(),
@@ -47,16 +46,23 @@ class Meter:
                         )
                         db.session.add(device)
                     devices[field] = device
+            db.session.commit()
+            print ('Finished importing devices')
 
-            for row in file_contents:
+            for index, row in enumerate(file_contents):
                 for key in row.keys():
-                    data = Data(
-                        time=row[Meter.DATE_TIME_KEY],
-                        value=row[key],
-                        device_id=devices[key].id,
-                    )
-                    db.session.add(data)
+                    if key in devices.keys():
+                        data = Data(
+                            time=dateutil.parser.parse(row[Meter.DATE_TIME_KEY]),
+                            value=row[key],
+                            device_id=devices[key].id,
+                        )
+                        db.session.add(data)
 
+                if index % self.EXPORT_ROW_COMMIT_SPLIT == 0:
+                    db.session.commit()
+
+            print ('Finished importing data')
             db.session.commit()
 
     def plotKey(self, key):

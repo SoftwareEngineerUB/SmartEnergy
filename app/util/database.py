@@ -2,7 +2,7 @@ from flask import Flask
 from flask_migrate import Migrate
 
 from app.device.meter import Meter
-from app.models import User, user
+from app.models import User
 from app.models.db import db
 
 
@@ -26,6 +26,7 @@ class Database:
                 user = User(username=username, email=username + '@smartenergy.cloud')
                 user.set_password('password')
                 db.session.add(user)
+                db.session.commit()
 
             # Export meter data
             meter = Meter(user)
@@ -45,4 +46,5 @@ class Database:
 
 if __name__ == "__main__":
     app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../app.sqlite'
     Database.exportRelevantData(app)
