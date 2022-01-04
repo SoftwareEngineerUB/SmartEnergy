@@ -24,7 +24,7 @@ class Meter:
     def __init__(self, user: User, year=2016, meter_id=1):
         self.user = user
         self.year = year
-        self.meter_id = 1
+        self.meter_id = meter_id
         self.data = MeterData()
 
     def exportToDatabase(self):
@@ -69,7 +69,3 @@ class Meter:
         plt.xlabel('Date')
         plt.ylabel(key)
         plt.show()
-
-
-if __name__ == "__main__":
-    pass
