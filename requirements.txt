@@ -30,3 +30,8 @@ imgkit==1.2.2
 Flask-MQTT==1.1.1
 Flask-SocketIO==5.1.1
 flask_migrate==3.1.0
+
+paho-mqtt~=1.6.1
+matplotlib~=3.5.1
+alembic~=1.7.5
+SQLAlchemy~=1.4.29
