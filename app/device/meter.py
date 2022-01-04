@@ -1,10 +1,12 @@
 import csv
 import os
 import pickle
+import uuid
 
 import dateutil.parser
 from matplotlib import pyplot as plt
-
+from app.models import Data, Device
+from app.models.db import db
 
 class MeterData:
     def __init__(self):
@@ -17,10 +19,44 @@ class MeterData:
 class Meter:
 
     DATE_TIME_KEY = 'Date & Time'
+    IGNORED_KEYS = ['use [kW]', 'gen [kW]', DATE_TIME_KEY]
 
     def __init__(self, year=2016, meter_id=1):
         self.data = MeterData()
         self.loadData(year, meter_id)
+
+    @staticmethod
+    def load_data(user, year, meter_id):
+        devices = dict()
+
+        with open(f"data/{year}/meter{meter_id}.csv", "r") as f:
+            file_contents = csv.DictReader(f)
+
+            for field in file_contents.fieldnames:
+                if field not in Meter.IGNORED_KEYS:
+                    device = db.session.query(Device).filter_by(user_id=user.id, alias=field).first()
+                    if device is None:
+                        device = Device(
+                            alias=field,
+                            uuid=uuid.uuid4(),
+                            description=field + ' mock device',
+                            status=True,
+                            settings=dict(),
+                            user_id=user.id,
+                        )
+                        db.session.add(device)
+                    devices[field] = device
+
+            for row in file_contents:
+                for key in row.keys():
+                    data = Data(
+                        time=row[Meter.DATE_TIME_KEY],
+                        value=row[key],
+                        device_id=devices[key].id,
+                    )
+                    db.session.add(data)
+
+            db.session.commit()
 
     def loadData(self, year, meter_id):
         pickle_file_path = f'data/pickles/{year}_{meter_id}.pkl'

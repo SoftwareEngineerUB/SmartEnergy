@@ -1,29 +1,27 @@
 import click
-from app.main import app
-from app.models import Data, Device, User, db
-from app.main import db
+from app.models import User
+from app.models.db import db
+from app.device.meter import Meter
+from flask import Blueprint
+
+mock_blueprint = Blueprint('mock', __name__)
 
 
-@app.cli.command('import-data')
-@click.argument('path')
-@click.argument('user', required=False)
-@click.argument('rows', required=False)
-def import_data(path, user=None, rows=100):
+@mock_blueprint.cli.command('import-data')
+@click.argument('year')
+@click.argument('meter')
+def import_data(year=2016, meter=1):
     """
         Imports mock data from the CSV file
     """
 
+    username = 'mock-user-' + str(meter)
+    user = db.session.query(User).filter_by(username=username).first()
     if user is None:
-        user = User(username='import', email='import@smartenergy.cloud')
+        user = User(username=username, email=username + '@smartenergy.cloud')
         user.set_password('password')
         db.session.add(user)
-    else:
-        user = db.session.query(User).filter_by(username=user).one()
 
-    with open(path, 'r') as file:
-        header = file.readline()
-        content = file.readlines(rows)
-        # TODO: insert data in database like the above user example
-
+    Meter.load_data(user, year, meter)
     db.session.commit()
     print('Done')
