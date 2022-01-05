@@ -2,6 +2,7 @@ from flask import Flask
 from flask_socketio import SocketIO
 
 # Instantiate Flask app
+from app.meter.route import app_meter
 from app.mqtt.mqtt_hub import initiateMqtt
 from app.util.database import Database
 
@@ -18,12 +19,14 @@ def index_page():
 
 # Initiate server
 def initiateFlask():
+    app.register_blueprint(app_meter)
+
     # Migrate database
     Database.initiateDatabase(app)
 
     # Initiate mqtt
-    # initiateMqtt(app)
+    initiateMqtt(app)
 
     # Initiate socket IO app - flask
     socketio = SocketIO(app)
-    socketio.run(app, host='localhost', port=5000, use_reloader=False, debug=True)
+    socketio.run(app, host='localhost', port=5000, use_reloader=True, debug=True)
