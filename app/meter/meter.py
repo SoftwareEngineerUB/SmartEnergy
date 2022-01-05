@@ -4,7 +4,6 @@ import uuid
 import dateutil.parser
 from matplotlib import pyplot as plt
 
-from app.meter.device import DeviceObject
 from app.models import Data, Device, User
 from app.models.db import db
 
@@ -16,13 +15,13 @@ class Meter:
 
     def __init__(self, user: User):
         self.user = user
-        self.devices: list[DeviceObject] = list()
-        self.loadData()
+        self.devices: list[Device] = list()
+        self.load()
 
-    def loadData(self):
+    def load(self):
         devices = db.session.query(Device).filter_by(user_id=self.user.id).all()
         for device in devices:
-            self.devices.append(DeviceObject(self.user, device))
+            self.devices.append(device)
 
     @staticmethod
     def exportCsvToDatabase(user: User, year=2016, meter_id=1):
@@ -72,4 +71,3 @@ class Meter:
     #     plt.xlabel('Date')
     #     plt.ylabel(key)
     #     plt.show()
-

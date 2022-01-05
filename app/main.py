@@ -6,22 +6,18 @@ from app.meter.route import app_meter
 from app.mqtt.mqtt_hub import initiateMqtt
 from app.util.database import Database
 
-app = Flask(__name__, instance_relative_config=True)
-app.config.from_mapping(SECRET_KEY='dev')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.sqlite'
-
-
-# Index page
-@app.route('/')
-def index_page():
-    return 'Hello World!'
-
 
 # Initiate server
 def initiateFlask():
+    # Initiate app
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(SECRET_KEY='dev')
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.sqlite'
+
+    # Register blueprints
     app.register_blueprint(app_meter)
 
-    # Migrate database
+    # Initiate database
     Database.initiateDatabase(app)
 
     # Initiate mqtt

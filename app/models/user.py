@@ -10,6 +10,13 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     devices = db.relationship('Device', backref='user')
 
+    def json(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email
+        }
+
     def set_password(self, password):
         """Create hashed password."""
         self.password = generate_password_hash(
