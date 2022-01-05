@@ -3,3 +3,5 @@ __pycache__/
 *.py[cod]
 *.sqlite
 /data/pickles/
+/app/app.sqlite
+/app/app.sqlite-journal

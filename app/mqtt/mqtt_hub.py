@@ -54,6 +54,6 @@ class MqttHub:
         return self.clients[name]
 
 
-def init_mqtt(app):
+def initiateMqtt(app):
     MqttHub.handle = MqttHub(app, MQTT_CONFIG_PATH)
     return MqttHub.handle
