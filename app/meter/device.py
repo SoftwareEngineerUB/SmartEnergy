@@ -1,3 +1,4 @@
+from json import JSONEncoder
 import uuid
 from typing import Optional
 
@@ -39,6 +40,14 @@ class DeviceObject:
         )
         db.session.add(data)
         db.session.commit()
+
+    def updateSettings(self, new_settings):
+        
+        if self.device is None:
+            raise Exception(f"Cannot update settings device before loading (id {self.device_id})")
+
+        self.device.settings.update(new_settings)
+        db.session.query(Device).update({Device.settings: self.device.settings})
 
     def detectAnomalies(self):
         pass
