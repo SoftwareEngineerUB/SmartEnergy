@@ -35,3 +35,5 @@ paho-mqtt~=1.6.1
 matplotlib~=3.5.1
 alembic~=1.7.5
 SQLAlchemy~=1.4.29
+
+pytest~=6.2.5
