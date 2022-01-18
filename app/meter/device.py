@@ -41,6 +41,7 @@ class DeviceObject:
         db.session.add(data)
         db.session.commit()
 
+
     def updateSettings(self, new_settings):
         
         if self.device is None:
@@ -48,6 +49,12 @@ class DeviceObject:
 
         self.device.settings.update(new_settings)
         db.session.query(Device).update({Device.settings: self.device.settings})
+
+    def getData(self, device_id, page, per_page):
+        offset = per_page * page
+        data = db.select("SELECT * FROM data WHERE `device_id` = %s LIMIT %s OFFSET %s")
+        return data
+
 
     def detectAnomalies(self):
         pass
