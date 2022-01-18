@@ -40,5 +40,10 @@ class DeviceObject:
         db.session.add(data)
         db.session.commit()
 
+    def getData(self, device_id, page, per_page):
+        offset = per_page * page
+        data = db.select("SELECT * FROM data WHERE `device_id` = %s LIMIT %s OFFSET %s")
+        return data
+
     def detectAnomalies(self):
         pass
