@@ -3,7 +3,7 @@ import json
 from flask import Flask
 
 from app.mqtt.broker import Broker
-from app.mqtt.flask_client import FlaskClient
+from app.mqtt.device_scheduler import DeviceScheduler
 from app.mqtt.client import Client
 
 MQTT_CONFIG_PATH = "./app/mqtt/mqtt_config.json"
@@ -45,7 +45,7 @@ class MqttHub:
         app.config['MQTT_TLS_ENABLED'] = self.config["tls_enabled"]  # set TLS to disabled for testing purposes
 
         self.broker = Broker(self.config)
-        self.flask_client = FlaskClient(app, self.config)
+        self.flask_client = DeviceScheduler(app, self.config)
 
         self.clients = {}
 

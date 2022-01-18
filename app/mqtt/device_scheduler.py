@@ -5,6 +5,7 @@ import json
 
 from flask import Flask
 from flask_mqtt import Mqtt
+from app.meter.device import DeviceObject
 
 from app.models import Data, Device, User
 from app.models.db import db
@@ -33,8 +34,8 @@ class ScheduleHandlers:
     @staticmethod
     def alarm(current_state: ScheduleState, 
                 seconds, repeats, channel, 
-                condition=lambda _: True, 
-                content_generator=lambda _: "uninitialized content for alarm"):
+                condition="always_true", 
+                content_generator="default_content"):
 
         if repeats is None:
             repeats = 1
@@ -44,22 +45,46 @@ class ScheduleHandlers:
 
             time.sleep(seconds)
 
-            if condition(current_state) is True:
-                current_state.queue.append((ScheduleState.PUBLISH, channel, content_generator(current_state)))
+            if call[condition](current_state) is True:
+                DeviceScheduler.assign_publish(channel, call[content_generator](current_state))
             
             if repeats is not None:
                 rep += 1
 
-call = {"alarm": ScheduleHandlers.alarm}
-"""Identifier -> Function map"""
+call = {"alarm": ScheduleHandlers.alarm, "always_true": lambda _: True, "default_content": b"uninitialized content"}
+"""Function dispatcher"""
 
-class FlaskClient:
+class DeviceScheduler:
     """The mqtt client associated with the flask webserver\n
         It manages the current state of the devices and their scheduling"""
 
     PUBLISH = "publish"
     EXEC_SYNC = "execs"
     EXEC_BACKGROUND = "execb"
+
+    @staticmethod
+    def assign_publish(state: ScheduleState, channel, content):
+
+        if type(content) == str:
+            content = content.encode()
+
+        state.queue.append((ScheduleState.PUBLISH, channel, content))
+
+    @staticmethod
+    def assign_exec_sync(state: ScheduleState, to_call, kwargs):
+
+        if type(to_call) != str:
+            to_call = to_call.__name__
+
+        state.queue.append((ScheduleState.EXEC_SYNC, to_call, kwargs))
+
+    @staticmethod
+    def assign_exec_background(state: ScheduleState, to_call, kwargs):
+
+        if type(to_call) != str:
+            to_call = to_call.__name__
+
+        state.queue.append((ScheduleState.EXEC_BACKGROUND, to_call, kwargs))
 
     def scheduler_loop(self, state: ScheduleState):
 
@@ -75,13 +100,13 @@ class FlaskClient:
 
                 r = state.queue.pop(0)
 
-                if r[0] == FlaskClient.PUBLISH:
+                if r[0] == DeviceScheduler.PUBLISH:
                     self.mqtt.publish(r[1], r[2])
 
-                elif r[0] == FlaskClient.EXEC_SYNC:
+                elif r[0] == DeviceScheduler.EXEC_SYNC:
                     call[r[1]](current_state=state, **r[2])
 
-                elif r[1] == FlaskClient.EXEC_BACKGROUND:
+                elif r[1] == DeviceScheduler.EXEC_BACKGROUND:
                     thr = Thread(target=call[r[1]], daemon=True, args=(state,), kwargs=r[2]) 
                     thr.start()
 
@@ -99,10 +124,12 @@ class FlaskClient:
                 
                 # check settings
                 for device in db.session.query(Device).filter_by(user_id=user.id):
-                    if "handlers" in device.settings.keys():
 
-                        for key, val in device.settings["handlers"]:
-                            initial_state.info[key] = val
+                    settings = json.loads(device.settings)
+                    if "handlers" in settings.keys():
+
+                        for fct, kwargs in settings["handlers"]:
+                            DeviceScheduler.assign_exec_background(initial_state, fct, kwargs)
                 
                 # start scheduler loop
                 self.per_user_scheds[user].start()
