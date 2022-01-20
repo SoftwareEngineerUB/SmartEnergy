@@ -51,3 +51,15 @@ def addDeviceData():
     device.addData(time, value)
 
     return jsonify(device.device.json())
+
+
+@app_meter.route('/device/data', methods=['GET'])
+def getDeviceData():
+    device_id = int(request.args.get("id", None))
+    page = int(request.args.get("page", 0))
+    per_page = int(request.args.get("per_page", 100))
+
+    device = DeviceObject(getMockUser(), device_id)
+    data = device.getData(device_id, page, per_page)
+
+    return jsonify(data)
