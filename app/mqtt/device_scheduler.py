@@ -1,12 +1,17 @@
 import time
 from random import randint
+from copy import deepcopy
 from threading import Thread, Condition, Lock
+from xml.etree.ElementTree import TreeBuilder
 
 from flask import Flask
 from flask_mqtt import Mqtt
 
 from app.models import Device, User
 from app.models.db import db
+
+# TODO remove after testing
+SECONDS_PER_HOUR = 3
 
 class ScheduleState:
     """Class for representing scheduler internal state"""
@@ -65,14 +70,71 @@ class ScheduleHandlers:
         """
 
     def global_shutdown(current_state: ScheduleState):
+        """Global shutdown broadcast"""
 
-        current_state.assign_publish("global", "<<SHUTDOWN>>")
+        current_state.info_lock.acquire()
+        global_channel = current_state.info["global_channel"]
+        current_state.info_lock.release()
+
+        current_state.assign_publish(global_channel, "<<SHUTDOWN>>")
         current_state.notify()
 
+    def time_interval_tracker(current_state: ScheduleState, device_uuid):
+        """Time interval tracker, for a specific device"""
+        
+        current_state.info_lock.acquire()
+
+        channel = current_state.info[device_uuid]["channel"]
+        intervals = deepcopy(current_state.info[device_uuid]["schedule"])
+
+        current_state.info_lock.release()
+
+        intervals.sort(key = lambda i: f"{i[0]}{i[1]}")
+
+        # LOTS AND LOTS OF TIME ARITHMETIC AHEAD
+
+        idx = 0
+        hour = int(time.strftime("%H"), 10)
+        delta = 0
+
+        if hour > intervals[-1][0]:
+            delta += 24 - hour
+            hour = 0
+
+        while intervals[idx][0] < hour:
+            idx += 1
+        delta += intervals[idx][0] - hour
+
+        time.sleep(delta * SECONDS_PER_HOUR)
+
+        while True:
+
+            current_state.assign_publish(channel, "<<START>>")
+            time.sleep((intervals[idx][1] - intervals[idx][0]) * SECONDS_PER_HOUR)
+            current_state.notify()
+
+            current_state.assign_publish(channel, "<<SHUTDOWN>>")
+
+            lo = intervals[idx][1]
+
+            idx = (idx + 1) % len(intervals)
+            hi = intervals[idx][0]
+
+            delta = hi - lo
+            if hi < lo:
+                delta += 24
+
+            time.sleep(delta * SECONDS_PER_HOUR)
+
     def alarm(current_state: ScheduleState, 
-                seconds, repeats, channel, 
+                seconds, repeats, device_uuid, 
                 condition="always_true", 
                 content_generator="default_content"):
+        """General-purpose alarm"""
+        
+        current_state.info_lock.acquire()
+        channel = current_state.info[device_uuid]["channel"]
+        current_state.info_lock.release()
 
         if repeats == -1:
             repeats = 1
@@ -102,7 +164,25 @@ class DeviceScheduler:
     """The mqtt client associated with the flask webserver\n
         It manages the current state of the devices and their scheduling"""
 
+    def parse_device_settings(self, device, state: ScheduleState):
+        """Update a state object based on given device settings"""
+
+        settings = device.settings
+
+        if "handlers" in settings.keys():
+            for fct, kwargs in settings["handlers"].items():
+                state.assign_exec_background(fct, kwargs)
+
+        state.info[device.uuid] = {}
+
+        if "channel" in settings.keys():
+            state.info[device.uuid]["channel"] = settings["channel"]
+
+        if "always_on" in settings.keys():
+            state.info[device.uuid]["always_on"] = settings["always_on"]
+
     def scheduler_loop(self, state: ScheduleState):
+        """Main scheduler infinite loop"""
         
         while True:
             
@@ -132,24 +212,18 @@ class DeviceScheduler:
         
         with self.app.app_context():
             for user in db.session.query(User).all():
-
-                # for each user in db
                 
                 initial_state = ScheduleState()
                 self.per_user_scheds[user] = Thread(target=self.scheduler_loop, daemon=True, args=(initial_state,))
-                
-                # check settings
+
+                # NOTE: since the state object is currently referenced only here
+                #       the locks are not (yet) used
+
                 for device in db.session.query(Device).filter_by(user_id=user.id):
+                    self.parse_device_settings(initial_state, device)
 
-                    settings = device.settings
-                    if "handlers" in settings.keys():
+                initial_state.info["global_channel"] = f"{self.config['global_channel_prefix']}_{user.username}"
 
-                        for fct, kwargs in settings["handlers"].items():
-                            initial_state.assign_exec_background(fct, kwargs)
-
-                    # TODO add initial info in initial_state from every device
-                
-                # start scheduler loop
                 self.per_user_scheds[user].start()
 
     def __init__(self, app: Flask, config):

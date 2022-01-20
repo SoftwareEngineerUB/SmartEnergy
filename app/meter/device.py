@@ -41,8 +41,8 @@ class DeviceObject:
         db.session.add(data)
         db.session.commit()
 
-
     def updateSettings(self, new_settings):
+        """Raw method for updating a device's settings"""
         
         if self.device is None:
             raise Exception(f"Cannot update settings device before loading (id {self.device_id})")
@@ -52,6 +52,18 @@ class DeviceObject:
         db.session.query(Device).filter_by(id=self.device_id).update({Device.settings: self.device.settings})
         db.session.commit()
 
+    def addRuntimeSchedule(self, time_intervals: list):
+        """Add running time intervals for this device\n
+            Eg. time_intervals = [(8, 11), (19, 20)] means \
+                the device will run (only) in the intervals\n
+                8am-11am and 7pm-8pm\n"""
+
+        pass
+
+    def setAlwaysOn(self):
+        """Set a device to always be on, ignoring any schedule or global shutdown message"""
+        pass
+        
     def getData(self, device_id, page, per_page):
         offset = per_page * page
         data = db.select("SELECT * FROM data WHERE `device_id` = %s LIMIT %s OFFSET %s")

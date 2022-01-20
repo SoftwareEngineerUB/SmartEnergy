@@ -8,7 +8,6 @@ from app.mqtt.client import Client
 
 MQTT_CONFIG_PATH = "./app/mqtt/mqtt_config.json"
 
-
 class MqttHub:
     """A class that contains most of mqtt-related initialization and runtime management\n
         NOTE: the code uses two mqtt modules: flask-mqtt and paho-mqtt;
