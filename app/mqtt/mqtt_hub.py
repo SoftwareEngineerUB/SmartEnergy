@@ -8,7 +8,6 @@ from app.mqtt.client import Client
 
 MQTT_CONFIG_PATH = "./app/mqtt/mqtt_config.json"
 
-
 class MqttHub:
     """A class that contains most of mqtt-related initialization and runtime management\n
         NOTE: the code uses two mqtt modules: flask-mqtt and paho-mqtt;
@@ -30,6 +29,7 @@ class MqttHub:
             json.dump(new_config, f)
 
     def __init__(self, app: Flask, config_path):
+
         self.config_path = config_path
         self.config = MqttHub.load_config(config_path)
 
@@ -45,7 +45,9 @@ class MqttHub:
         app.config['MQTT_TLS_ENABLED'] = self.config["tls_enabled"]  # set TLS to disabled for testing purposes
 
         self.broker = Broker(self.config)
-        self.scheduler = DeviceScheduler(app, self.config)
+        self.scheduler = None   # later
+
+        self.app = app
 
         self.clients = {}
 
@@ -53,6 +55,8 @@ class MqttHub:
         self.clients.update({name: Client(name)})
         return self.clients[name]
 
+    def initialize_scheduler(self):
+        self.scheduler = DeviceScheduler(self.app, self.config)
 
 def initiateMqtt(app):
     MqttHub.handle = MqttHub(app, MQTT_CONFIG_PATH)
