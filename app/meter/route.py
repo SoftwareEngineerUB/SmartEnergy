@@ -6,6 +6,7 @@ from app.meter.device import DeviceObject
 from app.meter.meter import Meter
 from app.models import User
 from app.models.db import db
+from app.mqtt.mqtt_hub import MqttHub
 
 app_meter = Blueprint('app_contents', __name__)
 
@@ -63,3 +64,15 @@ def getDeviceData():
     data = device.getData(device_id, page, per_page)
 
     return jsonify(data)
+
+
+@app_meter.route('/devices/start', methods=['GET'])
+def startDevices():
+    # does not actually start the devices
+    # but executes initialization functions for the scheduler
+    # and enforces device settings
+
+    MqttHub.handle.initialize_scheduler()
+
+    # TODO status code or smth
+    return "started"

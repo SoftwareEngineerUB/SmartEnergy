@@ -183,6 +183,9 @@ class DeviceScheduler:
         if "always_on" in settings.keys():
             state.info[device.uuid]["always_on"] = settings["always_on"]
 
+        if "schedule" in settings.keys():
+            state.info[device.uuid]["schedule"] = settings["schedule"]
+
     def scheduler_loop(self, state: ScheduleState):
         """Main scheduler infinite loop"""
         
@@ -222,7 +225,7 @@ class DeviceScheduler:
                 #       the locks are not (yet) used
 
                 for device in db.session.query(Device).filter_by(user_id=user.id):
-                    self.parse_device_settings(initial_state, device)
+                    self.parse_device_settings(device, initial_state)
 
                 initial_state.info["global_channel"] = f"{self.config['global_channel_prefix']}_{user.username}"
 
