@@ -48,7 +48,9 @@ class DeviceObject:
             raise Exception(f"Cannot update settings device before loading (id {self.device_id})")
 
         self.device.settings.update(new_settings)
-        db.session.query(Device).update({Device.settings: self.device.settings})
+        
+        db.session.query(Device).filter_by(id=self.device_id).update({Device.settings: self.device.settings})
+        db.session.commit()
 
     def getData(self, device_id, page, per_page):
         offset = per_page * page

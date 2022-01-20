@@ -45,7 +45,7 @@ class MqttHub:
         app.config['MQTT_TLS_ENABLED'] = self.config["tls_enabled"]  # set TLS to disabled for testing purposes
 
         self.broker = Broker(self.config)
-        self.flask_client = DeviceScheduler(app, self.config)
+        self.scheduler = DeviceScheduler(app, self.config)
 
         self.clients = {}
 
