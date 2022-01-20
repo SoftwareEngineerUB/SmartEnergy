@@ -1,4 +1,5 @@
 from json import JSONEncoder
+import random
 import uuid
 from typing import Optional
 
@@ -56,14 +57,45 @@ class DeviceObject:
         """Add running time intervals for this device\n
             Eg. time_intervals = [(8, 11), (19, 20)] means \
                 the device will run (only) in the intervals\n
-                8am-11am and 7pm-8pm\n"""
+                8am-11am and 7pm-8pm\n
+            NOTE: the intervals MUST be disjoint"""
 
-        pass
+        self.updateSettings({"schedule": time_intervals})
 
-    def setAlwaysOn(self):
+    def setAlwaysOn(self, status=True):
         """Set a device to always be on, ignoring any schedule or global shutdown message"""
-        pass
-        
+
+        self.updateSettings({"always_on": status})
+
+    def setChannel(self, channel=None):
+        """Assign a channel to a device\n
+            Note that the channel can coincide with other deivces' channels,
+            and all the runtime-schedule intervals will be inherited\n
+            If not sure, set a diffferent channel for every device
+            If the channel is not provided, a random ID will be selected"""
+
+        if channel is None:
+            channel = f"channel_{self.device.uuid}_{random.randint(0, 0xffff)}"
+
+        self.updateSettings({"channel": channel})
+
+    def addHandler(self, handler, kwargs):
+        """Add a handler for this device to be ran at startup"""
+
+        if type(handler) != str:
+            print(f"WARNING: direct handler passed to addHandler function\
+                 (it was automatically converted to str);\
+                 make sure it is added in the function dispatcher in ScheduleHandlers")
+            handler = handler.__name__
+
+        self.device.settings["handlers"].update({handler: kwargs})
+        self.updateSettings({})
+
+    def removeHandlers(self):
+        """Remove all startup handlers for this device"""
+
+        self.updateSettings({"handlers": {}})
+
     def getData(self, device_id, page, per_page):
         offset = per_page * page
         data = db.select("SELECT * FROM data WHERE `device_id` = %s LIMIT %s OFFSET %s")

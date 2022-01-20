@@ -154,6 +154,8 @@ class ScheduleHandlers:
 
     call = {
             "alarm": alarm,
+            "time_interval_tracker": time_interval_tracker,
+            "global_shutdown": global_shutdown,
             "always_true": lambda _: True, 
             "default_content": lambda _: b"uninitialized content",
             "random_notifier": lambda _: f"random message {randint(0, 10000)}"
