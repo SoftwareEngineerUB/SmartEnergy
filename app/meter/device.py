@@ -44,12 +44,12 @@ class DeviceObject:
 
     def updateSettings(self, new_settings):
         """Raw method for updating a device's settings"""
-        
+
         if self.device is None:
             raise Exception(f"Cannot update settings device before loading (id {self.device_id})")
 
         self.device.settings.update(new_settings)
-        
+
         db.session.query(Device).filter_by(id=self.device_id).update({Device.settings: self.device.settings})
         db.session.commit()
 
@@ -100,7 +100,6 @@ class DeviceObject:
         offset = per_page * page
         data = db.select("SELECT * FROM data WHERE `device_id` = %s LIMIT %s OFFSET %s")
         return data
-
 
     def detectAnomalies(self):
         pass

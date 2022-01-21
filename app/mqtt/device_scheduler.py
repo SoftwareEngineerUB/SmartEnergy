@@ -13,6 +13,7 @@ from app.models.db import db
 # TODO remove after testing
 SECONDS_PER_HOUR = 3
 
+
 class ScheduleState:
     """Class for representing scheduler internal state"""
 
@@ -21,7 +22,7 @@ class ScheduleState:
     EXEC_BACKGROUND = "execb"
 
     def __init__(self):
-        
+
         self.queue = []
         """FIFO queue that accumulates requests from every module of this app\n
             it is usually populated by ScheduleHandlers or, for example, anomaly detection routines"""
@@ -62,6 +63,7 @@ class ScheduleState:
 
         self.queue.append((ScheduleState.EXEC_BACKGROUND, to_call, kwargs))
 
+
 class ScheduleHandlers:
     """Collection of all (default) schedule-related handlers\n
         Rules for implementing a handler:\n
@@ -81,7 +83,7 @@ class ScheduleHandlers:
 
     def time_interval_tracker(current_state: ScheduleState, device_uuid):
         """Time interval tracker, for a specific device"""
-        
+
         current_state.info_lock.acquire()
 
         channel = current_state.info[device_uuid]["channel"]
@@ -89,7 +91,7 @@ class ScheduleHandlers:
 
         current_state.info_lock.release()
 
-        intervals.sort(key = lambda i: f"{i[0]}{i[1]}")
+        intervals.sort(key=lambda i: f"{i[0]}{i[1]}")
 
         # LOTS AND LOTS OF TIME ARITHMETIC AHEAD
 
@@ -126,12 +128,12 @@ class ScheduleHandlers:
 
             time.sleep(delta * SECONDS_PER_HOUR)
 
-    def alarm(current_state: ScheduleState, 
-                seconds, repeats, device_uuid, 
-                condition="always_true", 
-                content_generator="default_content"):
+    def alarm(current_state: ScheduleState,
+              seconds, repeats, device_uuid,
+              condition="always_true",
+              content_generator="default_content"):
         """General-purpose alarm"""
-        
+
         current_state.info_lock.acquire()
         channel = current_state.info[device_uuid]["channel"]
         current_state.info_lock.release()
@@ -148,19 +150,20 @@ class ScheduleHandlers:
                 current_state.assign_publish(channel, ScheduleHandlers.call[content_generator](current_state))
 
             current_state.notify()
-            
+
             if repeats == -1:
                 rep += 1
 
     call = {
-            "alarm": alarm,
-            "time_interval_tracker": time_interval_tracker,
-            "global_shutdown": global_shutdown,
-            "always_true": lambda _: True, 
-            "default_content": lambda _: b"uninitialized content",
-            "random_notifier": lambda _: f"random message {randint(0, 10000)}"
-            }
+        "alarm": alarm,
+        "time_interval_tracker": time_interval_tracker,
+        "global_shutdown": global_shutdown,
+        "always_true": lambda _: True,
+        "default_content": lambda _: b"uninitialized content",
+        "random_notifier": lambda _: f"random message {randint(0, 10000)}"
+    }
     """Function dispatcher"""
+
 
 class DeviceScheduler:
     """The mqtt client associated with the flask webserver\n
@@ -188,12 +191,11 @@ class DeviceScheduler:
 
     def scheduler_loop(self, state: ScheduleState):
         """Main scheduler infinite loop"""
-        
+
         while True:
-            
+
             # NOT busy waiting
             while len(state.queue) == 0:
-
                 state.wakeup.acquire(True)  # only because the wait() call needs the current thread to have the lock
                 state.wakeup.wait()
 
@@ -208,16 +210,16 @@ class DeviceScheduler:
                     ScheduleHandlers.call[r[1]](current_state=state, **r[2])
 
                 elif r[0] == ScheduleState.EXEC_BACKGROUND:
-                    thr = Thread(target=ScheduleHandlers.call[r[1]], daemon=True, args=(state,), kwargs=r[2]) 
+                    thr = Thread(target=ScheduleHandlers.call[r[1]], daemon=True, args=(state,), kwargs=r[2])
                     thr.start()
 
     def start_scheduler(self):
         """Parses each device settings for each user, calls required handlers\n
             and then starts the (infinite) publisher loop, for each different user"""
-        
+
         with self.app.app_context():
             for user in db.session.query(User).all():
-                
+
                 initial_state = ScheduleState()
                 self.per_user_scheds[user] = Thread(target=self.scheduler_loop, daemon=True, args=(initial_state,))
 
@@ -246,4 +248,4 @@ class DeviceScheduler:
             self.global_sched_thr.start()
 
         except Exception as err:
-           raise Exception(f"error while executing scheduler-related code: {err}")
+            raise Exception(f"error while executing scheduler-related code: {err}")
