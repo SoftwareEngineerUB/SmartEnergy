@@ -2,7 +2,6 @@ import csv
 import uuid
 
 import dateutil.parser
-from matplotlib import pyplot as plt
 
 from app.models import Data, Device, User
 from app.models.db import db
@@ -60,14 +59,3 @@ class Meter:
 
             print('Finished exporting data')
             db.session.commit()
-
-    # def plotKey(self, key):
-    #     if key not in self.data.keys:
-    #         return
-    #     x = [dateutil.parser.parse(v) for v in self.data.by_key[self.DATE_TIME_KEY]]
-    #     y = self.data.by_key[key]
-    #     # plotting the points
-    #     plt.plot(x, y)
-    #     plt.xlabel('Date')
-    #     plt.ylabel(key)
-    #     plt.show()
