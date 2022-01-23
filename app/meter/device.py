@@ -8,6 +8,7 @@ import dateutil.parser
 
 from app.models import User, Device, Data
 from app.models.db import db
+from app.util.anomaly_detector import AnomalyDetector
 
 
 class DeviceObject:
@@ -113,5 +114,14 @@ class DeviceObject:
 
         return data
 
-    def detectAnomalies(self):
-        pass
+    # it evaluates 6 hours of data, the interval beginning at the given timestamp
+    def anomalyCheck(self, timestamp):
+        queryString = f"SELECT * FROM data WHERE `device_id` = {self.device_id} and `time` >= Datetime('{timestamp}') and `time` <= Datetime('{timestamp}','+6 hours') "
+        query = text(queryString)
+        cursor =db.engine.execute(query)
+
+        data = [dict(row.items()) for row in cursor]
+        data = [[datapoint['time'], datapoint['value']] for datapoint in data]
+        anomalyDetector = AnomalyDetector(self.device_id)
+
+        return anomalyDetector.evalAnomaly(data)
