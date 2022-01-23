@@ -2,10 +2,7 @@
 from app.meter.device import DeviceObject
 import numpy as np
 
-EXTENSION_NAME = '.pth'
-CURRENT_PATH = './app/util/'
-DEVICE_BASE_NAME = "device_"
-TRAIN_FOLDER = "train_data/"
+from app.util.ML.constants import * 
 
 class DataManipulator():
     @staticmethod
@@ -28,7 +25,7 @@ class DataManipulator():
         
         finalData = np.array(finalData, dtype=np.float64)
 
-        with open(CURRENT_PATH + TRAIN_FOLDER + DEVICE_BASE_NAME + device_id + ".npy", 'wb') as f:
+        with open(BASE_PATH + TRAIN_FOLDER + DEVICE_BASE_NAME + device_id + ".npy", 'wb') as f:
             np.save(f, finalData)   
 
 def setDataForTrain(device:DeviceObject):

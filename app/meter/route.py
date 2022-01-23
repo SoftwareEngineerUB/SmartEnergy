@@ -7,7 +7,7 @@ from app.meter.meter import Meter
 from app.models import User
 from app.models.db import db
 from app.mqtt.mqtt_hub import MqttHub
-from app.util.data_manipulator import setDataForTrain
+from app.util.ML.data_manipulator import setDataForTrain
 
 app_meter = Blueprint('app_contents', __name__)
 
