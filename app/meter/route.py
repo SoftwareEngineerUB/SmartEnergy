@@ -7,7 +7,7 @@ from app.meter.meter import Meter
 from app.models import User
 from app.models.db import db
 from app.mqtt.mqtt_hub import MqttHub
-from app.util.anomaly_detector import getDataFromDb
+from app.util.data_manipulator import setDataForTrain
 
 app_meter = Blueprint('app_contents', __name__)
 
@@ -16,15 +16,23 @@ def getMockUser():
     username = 'mock-user'
     return db.session.query(User).filter_by(username=username).first()
 
+def generate_train_data():
+    meter = Meter(getMockUser())
+    for device in meter.devices:
+        deviceObj = DeviceObject(getMockUser(), device.id)
+        setDataForTrain(deviceObj)
 
-@app_meter.route("/train", methods=['GET'])
-def train():
-    device = DeviceObject(getMockUser(), 1)
-    getDataFromDb(device)
-
+        print(f"Device with id={device.id} done")
     return None
 
 
+@app_meter.route('/anomaly', methods=['GET'])
+def mockAnomalyCheck():
+    device = DeviceObject(getMockUser(), 1)
+    timestamp = '2015-01-01 00:30:00'
+
+    return jsonify(device.anomalyCheck(timestamp))
+  
 @app_meter.route('/devices', methods=['GET'])
 def getDevices():
     meter = Meter(getMockUser())
@@ -65,7 +73,7 @@ def addDeviceData():
 
 @app_meter.route('/device/data', methods=['GET'])
 def getDeviceData():
-    device_id = int(request.args.get("id", None))
+    device_id = int(request.args.get("id", 0))
     page = int(request.args.get("page", 0))
     per_page = int(request.args.get("per_page", 100))
 

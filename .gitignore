@@ -5,3 +5,4 @@ __pycache__/
 /data/pickles/
 /app/app.sqlite
 /app/app.sqlite-journal
+*.npy
