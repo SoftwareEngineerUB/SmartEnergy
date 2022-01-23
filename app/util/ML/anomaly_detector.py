@@ -232,9 +232,3 @@ class AnomalyDetector():
         total_consumption -= self.max_loss / 2 * len(consumption_arr) / 6 
 
         return total_consumption / self.mul_parameter # KW
-
-if __name__ == "__main__":
-    anomalyDetector = AnomalyDetector(1)
-    start_time = '2015-01-01 00:30:00'
-    end_time = '2015-01-01 06:30:00'
-    anomalyDetector.predictConsumption(start_time, end_time)
