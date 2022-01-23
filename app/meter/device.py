@@ -2,6 +2,7 @@ from json import JSONEncoder
 import random
 import uuid
 from typing import Optional
+from sqlalchemy import text
 
 import dateutil.parser
 
@@ -100,9 +101,17 @@ class DeviceObject:
 
         self.updateSettings({"handlers": {}})
 
-    def getData(self, device_id, page, per_page):
+    def getData(self, page = None, per_page = None):
         offset = per_page * page
-        data = db.select("SELECT * FROM data WHERE `device_id` = %s LIMIT %s OFFSET %s")
+
+        queryString = f"SELECT * FROM data WHERE `device_id` = {self.device_id} "
+        if page != None and per_page != None:
+            queryString += f"LIMIT {per_page} OFFSET {offset}"
+        
+        query = text(queryString)
+        cursor =db.engine.execute(query)
+        data = [dict(row.items()) for row in cursor]
+        
         return data
 
     def detectAnomalies(self):

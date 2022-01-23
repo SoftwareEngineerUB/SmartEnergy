@@ -63,7 +63,7 @@ def getDeviceData():
 
     device = DeviceObject(getMockUser(), device_id)
 
-    data = device.getData(device_id, page, per_page)
+    data = device.getData(page, per_page)
 
     return jsonify(data)
 
