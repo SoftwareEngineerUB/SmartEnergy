@@ -61,7 +61,7 @@ def getDeviceData():
     per_page = int(request.args.get("per_page", 100))
 
     device = DeviceObject(getMockUser(), device_id)
-    data = device.getData(device_id, page, per_page)
+    data = device.getData(page, per_page)
 
     return jsonify(data)
 
