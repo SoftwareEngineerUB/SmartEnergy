@@ -121,3 +121,11 @@ class DeviceObject:
         anomalyDetector = AnomalyDetector(self.device_id)
 
         return anomalyDetector.evalAnomaly(data)
+
+    # it predicts the consumption of the given device in the period start_time, end_time in KW
+    # start_time, end_time must be strings that represents the start_time, end_time
+    def predictConsumption(self, start_time:str, end_time:str):
+        anomalyDetector = AnomalyDetector(self.device_id)
+        
+        return anomalyDetector.predictConsumption(start_time, end_time)
+        
