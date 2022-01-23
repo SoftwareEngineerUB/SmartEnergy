@@ -11,13 +11,13 @@ from app.mqtt.mqtt_hub import MqttHub
 app_meter = Blueprint('app_contents', __name__)
 
 
-def getMockUser():
+def getMockUser() -> User:
     username = 'mock-user'
     return db.session.query(User).filter_by(username=username).first()
 
 
 @app_meter.route('/devices', methods=['GET'])
-def getDevices():
+def getDevices() -> json:
     meter = Meter(getMockUser())
 
     return jsonify([x.json() for x in meter.devices])
@@ -34,7 +34,8 @@ def getDevice():
 
 @app_meter.route('/device', methods=['POST'])
 def addDevice():
-    device_json = json.loads(request.body)
+    device_json = json.loads(request.json)
+
     device = DeviceObject.create(getMockUser(), device_json)
 
     return jsonify(device.json())
@@ -42,11 +43,11 @@ def addDevice():
 
 @app_meter.route('/device/data', methods=['POST'])
 def addDeviceData():
-    data = json.loads(request.body)
+    data = json.loads(request.json)
 
     device_id = int(data["id"])
     time = data["time"]
-    value = float(data["time"])
+    value = float(data["value"])
 
     device = DeviceObject(getMockUser(), device_id)
     device.addData(time, value)
@@ -61,6 +62,7 @@ def getDeviceData():
     per_page = int(request.args.get("per_page", 100))
 
     device = DeviceObject(getMockUser(), device_id)
+
     data = device.getData(page, per_page)
 
     return jsonify(data)
