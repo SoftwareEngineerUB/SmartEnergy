@@ -24,7 +24,7 @@ def initiateFlask():
     initiateMqtt(app)
 
     # Initiate socket IO app - flask
-    socketio = SocketIO(app)
-    socketio.run(app, host='localhost', port=5000, use_reloader=True, debug=True)
+    # socketio = SocketIO(app)
+    # socketio.run(app, host='localhost', port=5000, use_reloader=True, debug=True)
 
     return app

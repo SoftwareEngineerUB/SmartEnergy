@@ -17,7 +17,7 @@ class DeviceObject:
         self.load()
 
     @staticmethod
-    def create(user: User, device_json):
+    def create(user: User, device_json) -> Device:
         device = Device(
             alias=device_json['name'],
             uuid=str(uuid.uuid4()),
@@ -27,6 +27,10 @@ class DeviceObject:
             user_id=user.id,
         )
         db.session.add(device)
+
+        db.session.flush()
+        db.session.refresh(device)
+
         return device
 
     def load(self):
