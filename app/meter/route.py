@@ -7,6 +7,7 @@ from app.meter.meter import Meter
 from app.models import User
 from app.models.db import db
 from app.mqtt.mqtt_hub import MqttHub
+from app.util.anomaly_detector import getDataFromDb
 
 app_meter = Blueprint('app_contents', __name__)
 
@@ -14,6 +15,14 @@ app_meter = Blueprint('app_contents', __name__)
 def getMockUser():
     username = 'mock-user'
     return db.session.query(User).filter_by(username=username).first()
+
+
+@app_meter.route("/train", methods=['GET'])
+def train():
+    device = DeviceObject(getMockUser(), 1)
+    getDataFromDb(device)
+
+    return None
 
 
 @app_meter.route('/devices', methods=['GET'])
