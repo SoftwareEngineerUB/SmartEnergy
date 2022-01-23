@@ -8,7 +8,7 @@ import dateutil.parser
 
 from app.models import User, Device, Data
 from app.models.db import db
-from app.util.anomaly_detector import AnomalyDetector
+from app.util.ML.anomaly_detector import AnomalyDetector
 
 
 class DeviceObject:
