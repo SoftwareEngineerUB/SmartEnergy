@@ -101,11 +101,10 @@ class DeviceObject:
 
         self.updateSettings({"handlers": {}})
 
-    def getData(self, page=None, per_page=None):
-        offset = per_page * page
-
+    def getData(self, page = None, per_page = None):
         queryString = f"SELECT * FROM data WHERE `device_id` = {self.device_id} "
-        if page is not None and per_page is not None:
+        if page != None and per_page != None:
+            offset = per_page * page
             queryString += f"LIMIT {per_page} OFFSET {offset}"
 
         query = text(queryString)
