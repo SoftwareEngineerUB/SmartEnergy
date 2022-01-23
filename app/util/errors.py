@@ -16,13 +16,6 @@ class NetworkError:
             "error_code": self.error_code
         }), self.status
 
-    def getHtmlResponse(self):
-        return render_template(
-            "page-message.html",
-            title=self.title,
-            message=self.message
-        )
-
     def __str__(self):
         return self.message
 

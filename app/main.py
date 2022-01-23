@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_socketio import SocketIO
 
 # Instantiate Flask app
 from app.meter.route import app_meter
@@ -22,9 +21,5 @@ def initiateFlask():
 
     # Initiate mqtt
     initiateMqtt(app)
-
-    # Initiate socket IO app - flask
-    # socketio = SocketIO(app)
-    # socketio.run(app, host='localhost', port=5000, use_reloader=True, debug=True)
 
     return app

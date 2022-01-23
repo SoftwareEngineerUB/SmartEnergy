@@ -3,7 +3,7 @@ import json
 from flask import Flask
 
 from app.mqtt.broker import Broker
-from app.mqtt.device_scheduler import DeviceScheduler
+from app.meter.device_scheduler import DeviceScheduler
 from app.mqtt.client import Client
 
 MQTT_CONFIG_PATH = "./app/mqtt/mqtt_config.json"

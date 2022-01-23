@@ -101,17 +101,17 @@ class DeviceObject:
 
         self.updateSettings({"handlers": {}})
 
-    def getData(self, page = None, per_page = None):
+    def getData(self, page=None, per_page=None):
         offset = per_page * page
 
         queryString = f"SELECT * FROM data WHERE `device_id` = {self.device_id} "
-        if page != None and per_page != None:
+        if page is not None and per_page is not None:
             queryString += f"LIMIT {per_page} OFFSET {offset}"
-        
+
         query = text(queryString)
-        cursor =db.engine.execute(query)
+        cursor = db.engine.execute(query)
         data = [dict(row.items()) for row in cursor]
-        
+
         return data
 
     def detectAnomalies(self):
