@@ -4,3 +4,4 @@ __pycache__/
 *.sqlite
 /app/app.sqlite
 /app/app.sqlite-journal
+*.npy
