@@ -53,7 +53,7 @@ class AnomalyDetector():
         self.device_id = device_id
         self.modelName = "device_model_" + str(device_id)
         self.infoFileNamePath = BASE_PATH + "device_statistics/" + \
-            "device_info_" + str(device_id) + ".txt"
+                                "device_info_" + str(device_id) + ".txt"
         self.modelPath = BASE_PATH + "device_models/"
         self.cuda = GPU_ENABLED
 

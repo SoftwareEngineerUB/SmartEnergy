@@ -1,12 +1,12 @@
-
 from app.meter.device import DeviceObject
 import numpy as np
 
-from app.util.ML.constants import * 
+from app.util.ML.constants import *
+
 
 class DataManipulator():
     @staticmethod
-    def changeDataFormat(device:DeviceObject):
+    def changeDataFormat(device: DeviceObject):
         initialData = device.getData()
         device_id = str(device.device_id)
 
@@ -26,11 +26,12 @@ class DataManipulator():
                 hour = hour + 0.5
 
             finalData.append([month, day, hour, value])
-        
+
         finalData = np.array(finalData, dtype=np.float64)
 
         with open(BASE_PATH + TRAIN_FOLDER + DEVICE_BASE_NAME + device_id + ".npy", 'wb') as f:
-            np.save(f, finalData)   
+            np.save(f, finalData)
 
-def setDataForTrain(device:DeviceObject):
+
+def setDataForTrain(device: DeviceObject):
     DataManipulator.changeDataFormat(device)

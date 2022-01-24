@@ -1,4 +1,3 @@
-from json import JSONEncoder
 import random
 import uuid
 from typing import Optional
@@ -102,7 +101,7 @@ class DeviceObject:
 
         self.updateSettings({"handlers": {}})
 
-    def getData(self, page = None, per_page = None):
+    def getData(self, page=None, per_page=None):
         queryString = f"SELECT * FROM data WHERE `device_id` = {self.device_id} "
         if page != None and per_page != None:
             offset = per_page * page
@@ -118,7 +117,7 @@ class DeviceObject:
     def anomalyCheck(self, timestamp):
         queryString = f"SELECT * FROM data WHERE `device_id` = {self.device_id} and `time` >= Datetime('{timestamp}') and `time` <= Datetime('{timestamp}','+6 hours') "
         query = text(queryString)
-        cursor =db.engine.execute(query)
+        cursor = db.engine.execute(query)
 
         data = [dict(row.items()) for row in cursor]
         data = [[datapoint['time'], datapoint['value']] for datapoint in data]
