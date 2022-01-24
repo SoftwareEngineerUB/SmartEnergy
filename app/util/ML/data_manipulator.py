@@ -20,6 +20,10 @@ class DataManipulator():
             month = int(dateTimestamp.split("-")[1])
             day = int(dateTimestamp.split("-")[2])
             hour = int(hourTimestamp.split(":")[0])
+            minute = int(hourTimestamp.split(":")[1])
+
+            if minute == 30:
+                hour = hour + 0.5
 
             finalData.append([month, day, hour, value])
         

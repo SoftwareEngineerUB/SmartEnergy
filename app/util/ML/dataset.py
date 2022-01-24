@@ -3,16 +3,16 @@ import numpy as np
 
 from app.util.ML.constants import *
 
-DEVICE = T.device("cuda:0") 
-GPU_ENABLED = True
+DEVICE = T.device("cpu") 
+GPU_ENABLED = False
 
 class DeviceMeterDataset(T.utils.data.Dataset):
     @staticmethod
     def createDatasets(device_id, mul_factor = 1):
         allData = np.load(BASE_PATH + TRAIN_FOLDER + DEVICE_BASE_NAME + str(device_id) + ".npy")
         data_length = allData.shape[0]
-        used_data = data_length // 5
-        increasing_factor = int(data_length * 2 / 10)
+        used_data = min(data_length // 5, 40000)
+        increasing_factor = min(int(data_length * 2 / 10), 8000)
 
         np.random.shuffle(allData)
 

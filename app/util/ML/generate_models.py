@@ -9,9 +9,10 @@ def train(device_id):
     start_time = time.time()
     anomalyDetector = AnomalyDetector(device_id)
 
+    # anomalyDetector.train(20, 0.5, 2)
     anomalyDetector.train(100, 1e-1, 2)
     anomalyDetector.train(300, 1e-2, 2)
-    anomalyDetector.train(350, 5 * 1e-3, 2)
+    #anomalyDetector.train(350, 5 * 1e-3, 2)
     anomalyDetector.eval_mean_loss()
 
     end_time = time.time()
@@ -36,4 +37,5 @@ def custom_train(device_id):
     train(device_id)
     
 if __name__ == "__main__":
-    main()
+    custom_train(1)
+    custom_train(2)
