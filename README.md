@@ -30,14 +30,13 @@
 
 ### Colectarea cerințelor
 
- - [ ] Detectarea valorilor anormale a device-urilor 
- - [ ] Interactiune automata - inchidere si pornirea device-urilor in functie de setarile utilizatorului
- - [ ] Monitorizarea consumului device-urilor conectate
+ - [x] Detectarea valorilor anormale a device-urilor 
+ - [x] Monitorizarea consumului device-urilor conectate
  - [ ] Comunicarea dintre mai multe device-uri care se afla in aceeasi cladire 
  - [ ] Alertarea utilizatorilor asupra utilizarii energiei in mod ineficient.
  - [ ] Interactiune automata - inchidere si pornirea device-urilor in functie de setarile utilizatorului 
  - [ ] Sfaturi de micsorare a consumului
- - [ ] Invatare automata a obiceiurilor utilizatorului pentru a interactiona cu device-urile si a reduce consumul
+ - [x] Invatare automata a obiceiurilor utilizatorului pentru a interactiona cu device-urile si a reduce consumul
  - [ ] Conectarea cu alte device-uri smart pentru a prelua informatii de utilizare a acestora
  - [ ] Eficientizarea operatiilor pentru a reduce energia consumata de catre sursa
 
