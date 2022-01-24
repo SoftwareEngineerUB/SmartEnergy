@@ -146,18 +146,18 @@ class AnomalyDetector():
             total_loss += loss
         mean_loss = total_loss / len(loss_arr)
 
-        self.max_loss = 1.5 * mean_loss 
+        self.max_loss = 3 * mean_loss 
         self.save_model_info()
 
     @staticmethod
-    def convertDeviceData(deviceData:list([str, str])):
+    def convertDeviceData(deviceData:list([str, str]), mul_factor = 1.0):
         finalData = []
         for data in deviceData:
             timestamp = data[0]
             dateTimestamp = timestamp.split(" ")[0]
             hourTimestamp = timestamp.split(" ")[1]
 
-            value = float(data[1])
+            value = float(data[1]) * mul_factor
             month = int(dateTimestamp.split("-")[1])
             day = int(dateTimestamp.split("-")[2])
             hour = int(hourTimestamp.split(":")[0])
@@ -171,7 +171,7 @@ class AnomalyDetector():
     # it returns if there was an anomaly. Data must contain 
     def evalAnomaly(self, deviceData:list([str, str])):
         self.model.eval()
-        data = AnomalyDetector.convertDeviceData(deviceData)
+        data = AnomalyDetector.convertDeviceData(deviceData, self.mul_parameter)
 
         total_loss = 0.0
         for datapoint in data:
@@ -180,7 +180,7 @@ class AnomalyDetector():
                 Y = datapoint[3]
                 X = T.tensor(X, dtype=T.float32).to(DEVICE) 
                 oupt = self.model(X).item()  
-
+                print(oupt, Y)
                 total_loss += abs(oupt - Y)
         total_loss /= len(data)
 
