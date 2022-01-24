@@ -26,7 +26,21 @@ def generate_train_data():
     return None
 
 
-@app_meter.route('/anomaly', methods=['GET'])
+
+@app_meter.route('/predict_consumption', methods=['GET'])
+def getDeviceConsumption():
+    mock_start_time = '2015-01-01 00:30:00'
+    mock_end_time = '2015-01-01 06:30:00'
+    # TODO: handle endpoint cases
+    device_id = int(request.args.get("id", 0))
+    if device_id == 0:
+        return jsonify("Bad argument")
+
+    device = DeviceObject(getMockUser(), device_id)
+    return str(device.predictConsumption(mock_start_time, mock_end_time))
+    
+
+@app_meter.route('/anomaly/check', methods=['GET'])
 def mockAnomalyCheck():
     device = DeviceObject(getMockUser(), 1)
     timestamp = '2015-01-01 00:30:00'
@@ -42,7 +56,7 @@ def getDevices() -> json:
 
 @app_meter.route('/device', methods=['GET'])
 def getDevice():
-    device_id = int(request.args.get("id", None))
+    device_id = int(request.args.get("id", 0))
 
     device = DeviceObject(getMockUser(), device_id)
 

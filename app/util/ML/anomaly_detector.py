@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import torch as T
 import copy
 from tqdm import tqdm
+import datetime
 
 from app.util.ML.constants import *
 from app.util.ML.dataset import *
@@ -57,8 +58,8 @@ class AnomalyDetector():
         self.modelPath = BASE_PATH + "device_models/"
         self.cuda = GPU_ENABLED
 
-        # params -> month, day, time
-        self.model = T.nn.Sequential(
+        # params -> month, day, hour 
+        self.model =  T.nn.Sequential(
             T.nn.Linear(3, 6),
             T.nn.ReLU(),
             T.nn.Linear(6, 8),
@@ -207,3 +208,27 @@ class AnomalyDetector():
             return True
 
         return False
+
+    def predictConsumption(self, start_time, end_time):
+        start_time = getDatetime(start_time)
+        end_time = getDatetime(end_time)
+
+        current_time = start_time
+        consumption_arr = []
+
+        while current_time < end_time:
+            day = current_time.day
+            hour = current_time.hour
+            month = current_time.month
+
+            X = T.tensor(np.array([month, day, hour]), dtype=T.float32).to(DEVICE)
+            self.model.eval()
+            with T.no_grad():
+                consumption_arr.append(self.model(X).item())
+
+            current_time = current_time + datetime.timedelta(minutes=30)
+            
+        total_consumption = sum(consumption_arr)
+        total_consumption -= self.max_loss / 2 * len(consumption_arr) / 6 
+
+        return total_consumption / self.mul_parameter # KW
