@@ -49,7 +49,7 @@ class AnomalyDetector():
         self.safe_train = True
         # parameter for converting from KW to W
         self.mul_parameter = 1000.0
-        self.verbose = False
+        self.verbose = True
 
         self.device_id = device_id
         self.modelName = "device_model_" + str(device_id)
@@ -60,23 +60,15 @@ class AnomalyDetector():
 
         # params -> month, day, hour 
         self.model =  T.nn.Sequential(
-            T.nn.Linear(3, 6),
+            T.nn.Linear(3, 64),
             T.nn.ReLU(),
-            T.nn.Linear(6, 8),
+            T.nn.Linear(64, 64),
             T.nn.ReLU(),
-            T.nn.Linear(8, 10),
+            T.nn.Linear(64, 128),
             T.nn.ReLU(),
-            T.nn.Linear(10, 13),
+            T.nn.Linear(128, 64),
             T.nn.ReLU(),
-            T.nn.Linear(13, 10),
-            T.nn.ReLU(),
-            T.nn.Linear(10, 8),
-            T.nn.ReLU(),
-            T.nn.Linear(8, 6),
-            T.nn.ReLU(),
-            T.nn.Linear(6, 3),
-            T.nn.ReLU(),
-            T.nn.Linear(3, 1)
+            T.nn.Linear(64, 1),
         )
         if self.cuda:
             self.model.to(DEVICE)
