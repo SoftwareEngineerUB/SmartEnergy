@@ -49,7 +49,7 @@ def getDeviceConsumption():
 
     device = DeviceObject(getMockUser(), device_id)
     return str(device.predictConsumption(mock_start_time, mock_end_time))
-    
+
 
 @app_meter.route('/anomaly/check', methods=['GET'])
 def mockAnomalyCheck():
@@ -57,7 +57,8 @@ def mockAnomalyCheck():
     timestamp = '2015-01-01 00:30:00'
 
     return jsonify(device.anomalyCheck(timestamp))
-  
+
+
 @app_meter.route('/devices', methods=['GET'])
 def getDevices() -> json:
     meter = Meter(getMockUser())
