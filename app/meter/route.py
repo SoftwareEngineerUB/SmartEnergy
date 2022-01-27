@@ -16,6 +16,8 @@ def getMockUser() -> User:
     username = 'mock-user'
     return db.session.query(User).filter_by(username=username).first()
 
+
+@app_meter.route("/internal/generate_train_data", methods=['GET'])
 def generate_train_data():
     meter = Meter(getMockUser())
     for device in meter.devices:
@@ -23,8 +25,17 @@ def generate_train_data():
         setDataForTrain(deviceObj)
 
         print(f"Device with id={device.id} done")
-    return None
+    return "Done"
 
+
+@app_meter.route("/device_left_running", methods=['GET'])
+def getIsDeviceLeftRunning():
+    device_id = int(request.args.get("id", 0))
+    if device_id == 0:
+        return jsonify("Bad argument")
+
+    device = DeviceObject(getMockUser(), device_id)
+    return str(device.isDeviceLeftRunning())
 
 
 @app_meter.route('/predict_consumption', methods=['GET'])

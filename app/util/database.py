@@ -32,6 +32,8 @@ class Database:
 
             for year in [2014, 2015, 2016]:
                 for meter_id in range(1, 4):
+                    if meter_id == 3 and year == 2014:
+                        continue
                     Meter.exportCsvToDatabase(user, year, meter_id)
 
     @staticmethod

@@ -40,8 +40,10 @@ def custom_train(device_id):
 
 
 if __name__ == "__main__":
-    # custom_train(1)
+    custom_train(1)
+    custom_train(2)
     custom_train(3)
+    custom_train(6)
     custom_train(7)
     custom_train(8)
     custom_train(29)
