@@ -132,3 +132,23 @@ class DeviceObject:
         
         return anomalyDetector.predictConsumption(start_time, end_time)
         
+    
+    # predicts if this device is using much more energy than usual, and asks the user if he forgot the device in the running state
+    # prediction is valid for the last 1.5 hours of running
+    def isDeviceLeftRunning(self):
+        queryString = f"SELECT * FROM data WHERE `device_id` = {self.device_id} and strftime('%y',`time`) = '2015' ORDER BY `time` DESC LIMIT 10"
+        query = text(queryString)
+        cursor = db.engine.execute(query)
+
+        data = [dict(row.items()) for row in cursor]
+        data = [[datapoint['time'], datapoint['value']] for datapoint in data]
+        start_time = data[0][0]
+        end_time = data[-1][0]
+
+
+        anomalyDetector = AnomalyDetector(self.device_id)
+        predictedConsumption = anomalyDetector.predictConsumption(start_time, end_time)
+        if predictedConsumption > 3 * sum([float(x[1]) for x in data]):
+            return "Device might be left running"
+        
+        return "Device seems running ok"
