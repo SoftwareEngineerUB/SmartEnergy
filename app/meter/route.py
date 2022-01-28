@@ -8,6 +8,7 @@ from app.models import User
 from app.models.db import db
 from app.mqtt.mqtt_hub import MqttHub
 from app.util.ML.data_manipulator import setDataForTrain
+from app.meter.user import UserObject
 
 app_meter = Blueprint('app_contents', __name__)
 
@@ -15,6 +16,13 @@ app_meter = Blueprint('app_contents', __name__)
 def getMockUser() -> User:
     username = 'mock-user'
     return db.session.query(User).filter_by(username=username).first()
+
+
+@app_meter.route("/statistics", methods=['GET'])
+def getStatistics():
+    userObj = UserObject(getMockUser())
+    userObj.getMonthlyStatistics(2016, 3)
+    return "Done"
 
 
 @app_meter.route("/internal/generate_train_data", methods=['GET'])

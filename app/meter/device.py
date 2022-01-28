@@ -136,7 +136,7 @@ class DeviceObject:
     # predicts if this device is using much more energy than usual, and asks the user if he forgot the device in the running state
     # prediction is valid for the last 1.5 hours of running
     def isDeviceLeftRunning(self):
-        queryString = f"SELECT * FROM data WHERE `device_id` = {self.device_id} and strftime('%y',`time`) = '2015' ORDER BY `time` DESC LIMIT 10"
+        queryString = f"SELECT * FROM data WHERE `device_id` = {self.device_id} and strftime('%Y',`time`) = '2015' ORDER BY `time` DESC LIMIT 10"
         query = text(queryString)
         cursor = db.engine.execute(query)
 
@@ -152,3 +152,17 @@ class DeviceObject:
             return "Device might be left running"
         
         return "Device seems running ok"
+    
+    def getMonthlyConsumption(self, year, month):
+        if month < 10:
+            month = '0' + str(month)
+        else:
+            month = str(month)
+        
+        queryString = f"SELECT * FROM data WHERE `device_id` = {self.device_id} and strftime('%Y',`time`) = '{year}' and strftime('%m',`time`) = '{month}'"
+        query = text(queryString)
+        cursor = db.engine.execute(query)
+
+        data = [dict(row.items()) for row in cursor]
+        data = [datapoint['value'] for datapoint in data]
+        return sum(data)
