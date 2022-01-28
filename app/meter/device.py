@@ -127,12 +127,11 @@ class DeviceObject:
 
     # it predicts the consumption of the given device in the period start_time, end_time in KW
     # start_time, end_time must be strings that represents the start_time, end_time
-    def predictConsumption(self, start_time:str, end_time:str):
+    def predictConsumption(self, start_time: str, end_time: str):
         anomalyDetector = AnomalyDetector(self.device_id)
-        
+
         return anomalyDetector.predictConsumption(start_time, end_time)
-        
-    
+
     # predicts if this device is using much more energy than usual, and asks the user if he forgot the device in the running state
     # prediction is valid for the last 1.5 hours of running
     def isDeviceLeftRunning(self):
@@ -142,13 +141,15 @@ class DeviceObject:
 
         data = [dict(row.items()) for row in cursor]
         data = [[datapoint['time'], datapoint['value']] for datapoint in data]
+        if len(data) < 0:
+            return False
+
         start_time = data[0][0]
         end_time = data[-1][0]
-
 
         anomalyDetector = AnomalyDetector(self.device_id)
         predictedConsumption = anomalyDetector.predictConsumption(start_time, end_time)
         if predictedConsumption > 3 * sum([float(x[1]) for x in data]):
-            return "Device might be left running"
-        
-        return "Device seems running ok"
+            return True
+
+        return False
