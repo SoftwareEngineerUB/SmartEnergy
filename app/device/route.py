@@ -26,6 +26,7 @@ def generate_train_data():
     return "Done"
 
 
+# Statistics for Devices
 @app_device.route("/device/left_running", methods=['GET'])
 def getIsDeviceLeftRunning():
     device_id = int(request.args.get("id", 0))
@@ -57,6 +58,7 @@ def mockAnomalyCheck():
     return jsonify(device.anomalyCheck(timestamp))
 
 
+# CRUD API Devices
 @app_device.route('/devices', methods=['GET'])
 def getDevices() -> json:
     meter = Meter(UserObject.getMockUser())
@@ -80,6 +82,26 @@ def addDevice():
     device = DeviceObject.create(UserObject.getMockUser(), device_json)
 
     return jsonify(device.json())
+
+
+@app_device.route('/device', methods=['PUT'])
+def updateDevice():
+    device_json = json.loads(request.json)
+
+    device = DeviceObject(UserObject.getMockUser(), device_json['device_id'])
+    device.update(device_json)
+
+    return jsonify(device.device.json())
+
+
+@app_device.route('/device', methods=['DELETE'])
+def deleteDevice():
+    request_data = json.loads(request.json)
+
+    device = DeviceObject(UserObject.getMockUser(), request_data['device_id'])
+    device.delete()
+
+    return jsonify(True)
 
 
 @app_device.route('/device/data', methods=['POST'])

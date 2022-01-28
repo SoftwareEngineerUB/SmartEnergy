@@ -36,6 +36,24 @@ class DeviceObject:
 
         return device
 
+    def update(self, new_device):
+        new_device["id"] = self.device_id
+        new_device["user_id"] = self.device["user_id"]
+        new_device["uuid"] = self.device["uuid"]
+
+        self.device = new_device
+
+        queryString = f"UPDATE Device SET `alias` = %s, `description` = %s, `status` = %s, `settings` = %s WHERE `id` = %s AND `user_id` = %s"
+        query = text(queryString)
+        db.engine.execute(query, (new_device['alias'], new_device['description'], new_device['status'], new_device['settings'], new_device['id'], new_device['user_id']))
+
+        return self.device
+
+    def delete(self):
+        queryString = "DELETE Device WHERE `id` = %s AND `user_id` = %s"
+        query = text(queryString)
+        db.engine.execute(query, (self.device_id, self.device['user_id']))
+
     def load(self):
         device = db.session.query(Device).filter_by(user_id=self.user.id, id=self.device_id).first()
         self.device = device
