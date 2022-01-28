@@ -2,6 +2,8 @@ import random
 import uuid
 from typing import Optional
 from sqlalchemy import text
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 import dateutil.parser
 
@@ -173,3 +175,17 @@ class DeviceObject:
         average_consumption = total_consumption / (end_day - start_day)
 
         return total_consumption, average_consumption
+    
+    def getMonthlyPrediction(self, year, month):
+        day = 1 
+        start_time = datetime(year, month, day, hour=0, minute=0, second=0)
+        end_time = start_time + relativedelta(months=1)
+
+        end_day = (end_time - relativedelta(days=1)).day    
+        days_elapsed = end_day - day
+    
+        anomalyDtector = AnomalyDetector(self.device_id)
+        total_consumption = anomalyDtector.predictConsumption(str(start_time), str(end_time)) 
+        avg_consumption = total_consumption / days_elapsed
+        
+        return total_consumption, avg_consumption

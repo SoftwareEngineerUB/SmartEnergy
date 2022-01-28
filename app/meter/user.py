@@ -33,7 +33,7 @@ class UserObject:
                 max_id = device.device_id
             
             statistics['devices consumption'].append({
-                "device name: " : device.device.alias,
+                "device name: " : device.device.alias.split("[kW]")[0],
                 "total consumption this month (kW): " : total_consumption,
                 "average daily consumption (kW): " : mean_daily_consumption,
             })
@@ -41,12 +41,39 @@ class UserObject:
             # print(device.device_id, device.device.alias, total_consumption, mean_daily_consumption)
 
         statistics['most consuming device'] = {
-            "device name: " : [x.device.alias for x in devices if x.device_id == max_id][0],
+            "device name: " : [x.device.alias.split("[kW]")[0] for x in devices if x.device_id == max_id][0],
             "total consumption (kW): " : max_consumption,
             "aaverage daily consumption (kW): " : mean_daily_consumption 
         }
 
         return statistics
+
+
+    def getSavingsRecomandations(self, year, month):
+        devices = self.getUserDevices()
+        devices = [DeviceObject(self.user, device.id) for device in devices]
+
+        devicesToBeOptimized = []
+
+        for device in devices:
+            total_prediction, avg_prediction = device.getMonthlyPrediction(year, month)
+            total_real, avg_real = device.getMonthlyConsumption(year, month)
+
+            if total_real > 1.5 * total_prediction:
+                devicesToBeOptimized.append({
+                    "device name: " : device.device.alias.split("[kW]")[0],
+                    "predicted consumption: " : total_prediction, 
+                    "real consumption: " : total_real,
+                    "tip: " : "Reduce the consumption by keeping the old habbits"
+                })
+            
+            print(f"device {device.device_id} done")
+
+        print(len(devicesToBeOptimized))
+        
+        return devicesToBeOptimized
+
+            
 
     
 
