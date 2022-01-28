@@ -27,6 +27,10 @@ def getStatistics():
 
 @app_meter.route("/internal/generate_train_data", methods=['GET'])
 def generate_train_data():
+    key = int(request.args.get("key", 0))
+    if key != 1234:
+        return "Unauthorized"
+        
     meter = Meter(getMockUser())
     for device in meter.devices:
         deviceObj = DeviceObject(getMockUser(), device.id)
