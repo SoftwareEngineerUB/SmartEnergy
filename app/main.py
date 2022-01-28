@@ -2,7 +2,7 @@ from flask import Flask
 
 # Instantiate Flask app
 from app.meter.route import app_meter
-from app.mqtt.mqtt_hub import initiateMqtt
+from app.mqtt.mqtt_hub import initiateMqtt, MqttHub
 from app.util.database import Database
 
 
@@ -21,5 +21,8 @@ def initiateFlask():
 
     # Initiate mqtt
     initiateMqtt(app)
+
+    # Initiate mqtt scheduler
+    MqttHub.handle.initialize_scheduler()
 
     return app
