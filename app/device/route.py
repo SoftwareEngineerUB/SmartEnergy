@@ -77,7 +77,7 @@ def getDevice():
 
 @app_device.route('/device', methods=['POST'])
 def addDevice():
-    device_json = json.loads(request.json)
+    device_json = request.json
 
     device = DeviceObject.create(UserObject.getMockUser(), device_json)
 
@@ -86,9 +86,9 @@ def addDevice():
 
 @app_device.route('/device', methods=['PUT'])
 def updateDevice():
-    device_json = json.loads(request.json)
+    device_json = request.json
 
-    device = DeviceObject(UserObject.getMockUser(), device_json['device_id'])
+    device = DeviceObject(UserObject.getMockUser(), device_json['id'])
     device.update(device_json)
 
     return jsonify(device.device.json())
@@ -96,9 +96,9 @@ def updateDevice():
 
 @app_device.route('/device', methods=['DELETE'])
 def deleteDevice():
-    request_data = json.loads(request.json)
+    request_data = request.json
 
-    device = DeviceObject(UserObject.getMockUser(), request_data['device_id'])
+    device = DeviceObject(UserObject.getMockUser(), request_data['id'])
     device.delete()
 
     return jsonify(True)
