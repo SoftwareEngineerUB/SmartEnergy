@@ -1,3 +1,4 @@
+import json
 import random
 import uuid
 from typing import Optional
@@ -22,19 +23,33 @@ class DeviceObject:
     @staticmethod
     def create(user: User, device_json) -> Device:
         device = Device(
-            alias=device_json['name'],
+            alias=device_json['alias'],
             uuid=str(uuid.uuid4()),
-            description=f"{device_json['name']} mock device",
+            description=f"{device_json['alias']} mock device",
             status=True,
             settings=dict(),
             user_id=user.id,
         )
         db.session.add(device)
-
+        db.session.commit()
         db.session.flush()
         db.session.refresh(device)
 
         return device
+
+    def update(self, new_device):
+        queryString = f"UPDATE device SET `alias` = '{new_device['alias']}', `description` = '{new_device['description']}' WHERE `id` = {new_device['id']}"
+        query = text(queryString)
+        db.engine.execute(query)
+
+        self.load()
+
+        return self.device
+
+    def delete(self):
+        queryString = f"DELETE FROM device WHERE `id` = {self.device_id}"
+        query = text(queryString)
+        db.engine.execute(query)
 
     def load(self):
         device = db.session.query(Device).filter_by(user_id=self.user.id, id=self.device_id).first()
