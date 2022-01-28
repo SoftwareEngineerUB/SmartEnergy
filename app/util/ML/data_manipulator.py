@@ -1,4 +1,4 @@
-from app.meter.device import DeviceObject
+from app.device.device import DeviceObject
 import numpy as np
 
 from app.util.ML.constants import *
