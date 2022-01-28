@@ -1,4 +1,5 @@
 import json
+from os import stat
 
 from flask import Blueprint, jsonify, request
 
@@ -21,8 +22,9 @@ def getMockUser() -> User:
 @app_meter.route("/statistics", methods=['GET'])
 def getStatistics():
     userObj = UserObject(getMockUser())
-    userObj.getMonthlyStatistics(2016, 3)
-    return "Done"
+    statistics = userObj.getMonthlyStatistics(2016, 3)
+
+    return jsonify(statistics)
 
 
 @app_meter.route("/internal/generate_train_data", methods=['GET'])

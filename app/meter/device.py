@@ -164,5 +164,12 @@ class DeviceObject:
         cursor = db.engine.execute(query)
 
         data = [dict(row.items()) for row in cursor]
-        data = [datapoint['value'] for datapoint in data]
-        return sum(data)
+        data = [[datapoint['time'], datapoint['value']] for datapoint in data]
+        
+        start_day = int(data[0][0].split(" ")[0].split("-")[2])
+        end_day = int(data[-1][0].split(" ")[0].split("-")[2])
+
+        total_consumption = sum([x[1] for x in data])
+        average_consumption = total_consumption / (end_day - start_day)
+
+        return total_consumption, average_consumption
