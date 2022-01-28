@@ -47,4 +47,5 @@ if __name__ == "__main__":
     custom_train(7)
     custom_train(8)
     custom_train(29)
+    main()
     
