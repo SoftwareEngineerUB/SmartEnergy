@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_migrate import Migrate
 
-from app.meter.meter import Meter
+from app.device.meter import Meter
 from app.models import User
 from app.models.db import db
 

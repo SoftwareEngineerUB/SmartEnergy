@@ -1,8 +1,9 @@
 from flask import Flask
 
 # Instantiate Flask app
-from app.meter.route import app_meter
+from app.device.route import app_device
 from app.mqtt.mqtt_hub import initiateMqtt, MqttHub
+from app.user.route import app_user
 from app.util.database import Database
 
 
@@ -15,7 +16,9 @@ def initiateFlask():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
     # Register blueprints
-    app.register_blueprint(app_meter)
+    app.register_blueprint(app_device)
+    app.register_blueprint(app_user)
+
     # Initiate database
     Database.initiateDatabase(app)
 

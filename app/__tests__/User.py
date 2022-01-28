@@ -1,10 +1,10 @@
 from unittest import TestCase
 
-from app.meter.route import getMockUser
+from app.user.user import UserObject
 
 
 class Test(TestCase):
     def test_get_mock_user(self):
-        user = getMockUser()
+        user = UserObject.getMockUser()
 
         self.assertTrue(user)

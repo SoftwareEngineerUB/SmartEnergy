@@ -105,7 +105,7 @@ class DeviceObject:
 
     def getData(self, page=None, per_page=None):
         queryString = f"SELECT * FROM data WHERE `device_id` = {self.device_id} "
-        if page != None and per_page != None:
+        if page is not None and per_page is not None:
             offset = per_page * page
             queryString += f"LIMIT {per_page} OFFSET {offset}"
 
@@ -134,8 +134,8 @@ class DeviceObject:
 
         return anomalyDetector.predictConsumption(start_time, end_time)
 
-    # predicts if this device is using much more energy than usual, and asks the user if he forgot the device in the running state
-    # prediction is valid for the last 1.5 hours of running
+    # predicts if this device is using much more energy than usual, and asks the user if he forgot the device in the
+    # running state prediction is valid for the last 1.5 hours of running
     def isDeviceLeftRunning(self):
         queryString = f"SELECT * FROM data WHERE `device_id` = {self.device_id} and strftime('%Y',`time`) = '2015' ORDER BY `time` DESC LIMIT 3"
         query = text(queryString)
@@ -153,22 +153,22 @@ class DeviceObject:
         predictedConsumption = anomalyDetector.predictConsumption(start_time, end_time)
         if predictedConsumption > 3 * sum([float(x[1]) for x in data]):
             return True
-        
+
         return False
-    
+
     def getMonthlyConsumption(self, year, month):
         if month < 10:
             month = '0' + str(month)
         else:
             month = str(month)
-        
+
         queryString = f"SELECT * FROM data WHERE `device_id` = {self.device_id} and strftime('%Y',`time`) = '{year}' and strftime('%m',`time`) = '{month}'"
         query = text(queryString)
         cursor = db.engine.execute(query)
 
         data = [dict(row.items()) for row in cursor]
         data = [[datapoint['time'], datapoint['value']] for datapoint in data]
-        
+
         start_day = int(data[0][0].split(" ")[0].split("-")[2])
         end_day = int(data[-1][0].split(" ")[0].split("-")[2])
 
@@ -176,17 +176,17 @@ class DeviceObject:
         average_consumption = total_consumption / (end_day - start_day)
 
         return total_consumption, average_consumption
-    
+
     def getMonthlyPrediction(self, year, month):
-        day = 1 
+        day = 1
         start_time = datetime(year, month, day, hour=0, minute=0, second=0)
         end_time = start_time + relativedelta(months=1)
 
-        end_day = (end_time - relativedelta(days=1)).day    
+        end_day = (end_time - relativedelta(days=1)).day
         days_elapsed = end_day - day
-    
+
         anomalyDtector = AnomalyDetector(self.device_id)
-        total_consumption = anomalyDtector.predictConsumption(str(start_time), str(end_time)) 
+        total_consumption = anomalyDtector.predictConsumption(str(start_time), str(end_time))
         avg_consumption = total_consumption / days_elapsed
-        
+
         return total_consumption, avg_consumption
