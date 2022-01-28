@@ -1,4 +1,5 @@
 import json
+from os import stat
 
 from flask import Blueprint, jsonify, request
 
@@ -8,6 +9,7 @@ from app.models import User
 from app.models.db import db
 from app.mqtt.mqtt_hub import MqttHub
 from app.util.ML.data_manipulator import setDataForTrain
+from app.meter.user import UserObject
 
 app_meter = Blueprint('app_contents', __name__)
 
@@ -17,9 +19,21 @@ def getMockUser() -> User:
     return db.session.query(User).filter_by(username=username).first()
 
 
+@app_meter.route("/statistics", methods=['GET'])
+def getStatistics():
+    userObj = UserObject(getMockUser())
+    statistics = userObj.getMonthlyStatistics(2016, 3)
+
+    return jsonify(statistics)
+
+
 # TODO: not working
 @app_meter.route("/device/internal/generate_train_data", methods=['GET'])
 def generate_train_data():
+    key = int(request.args.get("key", 0))
+    if key != 1234:
+        return "Unauthorized"
+        
     meter = Meter(getMockUser())
     for device in meter.devices:
         deviceObj = DeviceObject(getMockUser(), device.id)
@@ -27,6 +41,12 @@ def generate_train_data():
 
         print(f"Device with id={device.id} done")
     return "Done"
+
+@app_meter.route("/unoptimized_devices")
+def getUnoptimizedDevices():
+    userObj = UserObject(getMockUser())
+
+    return jsonify(userObj.getUnoptimizedDevices(2015, 3))
 
 
 @app_meter.route("/device/left_running", methods=['GET'])

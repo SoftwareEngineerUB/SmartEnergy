@@ -11,7 +11,7 @@ def getDatetime(datestamp:str) -> datetime.datetime:
     time = datestamp.split(" ")[1]
 
     year, month, day = [int(aux) for aux in date.split("-")]
-    hour, minute, second = [int(aux) for aux in time.split(":")]
+    hour, minute, second = [int(float(aux)) for aux in time.split(":")]
 
     if minute != 30 and minute != 0:
         minute = 30
