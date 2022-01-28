@@ -49,7 +49,7 @@ class UserObject:
         return statistics
 
 
-    def getSavingsRecomandations(self, year, month):
+    def getUnoptimizedDevices(self, year, month):
         devices = self.getUserDevices()
         devices = [DeviceObject(self.user, device.id) for device in devices]
 
@@ -70,7 +70,7 @@ class UserObject:
             print(f"device {device.device_id} done")
 
         print(len(devicesToBeOptimized))
-        
+
         return devicesToBeOptimized
 
             

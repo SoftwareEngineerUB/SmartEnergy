@@ -41,11 +41,11 @@ def generate_train_data():
         print(f"Device with id={device.id} done")
     return "Done"
 
-@app_meter.route("/get_savings_recomandations")
-def getSavingsRecomandations():
+@app_meter.route("/unoptimized_devices")
+def getUnoptimizedDevices():
     userObj = UserObject(getMockUser())
 
-    return jsonify(userObj.getSavingsRecomandations(2015, 3))
+    return jsonify(userObj.getUnoptimizedDevices(2015, 3))
 
 
 @app_meter.route("/device_left_running", methods=['GET'])
