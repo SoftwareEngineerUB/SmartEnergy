@@ -3,8 +3,9 @@ from app.models.user import User
 from app.models.db import db
 from app.meter.meter import Meter
 
+
 class UserObject:
-    def __init__(self, user:User) -> None:
+    def __init__(self, user: User) -> None:
         self.user = user
 
     # returns the model assosiacted with the devices
@@ -72,11 +73,3 @@ class UserObject:
         print(len(devicesToBeOptimized))
 
         return devicesToBeOptimized
-
-            
-
-    
-
-
-        
-        

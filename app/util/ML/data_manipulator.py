@@ -4,7 +4,7 @@ import numpy as np
 from app.util.ML.constants import *
 
 
-class DataManipulator():
+class DataManipulator:
     @staticmethod
     def changeDataFormat(device: DeviceObject):
         initialData = device.getData()
