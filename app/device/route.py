@@ -89,7 +89,10 @@ def updateDevice():
     device_json = request.json
 
     device = DeviceObject(UserObject.getMockUser(), device_json['id'])
-    device.update(device_json)
+    device.update({
+        'alias': device_json['alias'],
+        'description': device_json['description'],
+    })
 
     return jsonify(device.device.json())
 

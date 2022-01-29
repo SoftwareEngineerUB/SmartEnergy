@@ -1,11 +1,20 @@
 import pytest
 
 from app.main import initiateFlask
-from app.models.db import db
+
+from app.util.database import Database
 
 context = dict(
-    app=initiateFlask(True),
+    app=initiateFlask(testing=True),
 )
+
+
+@pytest.fixture(autouse=True)
+def clean_database_between_tests():
+    with context['app'].app_context():
+        Database.importRelevantData(context['app'], testing=True)
+        yield
+        Database.cleanDatabase()
 
 
 @pytest.fixture(autouse=True)
