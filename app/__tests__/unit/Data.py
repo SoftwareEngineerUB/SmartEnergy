@@ -3,20 +3,17 @@ import datetime
 import pytest
 
 from app.device.device import DeviceObject
+from app.device.meter import Meter
+from app.models import Device
+from app.models.db import db
 from app.user.user import UserObject
-from app.util.database import Database
 from random import randint
 
 
 @pytest.fixture
 def device():
-    device_alias = 'test'
-    device = DeviceObject.create(UserObject.getMockUser(), {
-        'alias': device_alias
-    })
-    assert (device.alias == device_alias)
-    Database.addTestingData(device)
-    yield device
+    Meter.exportCsvToDatabase(UserObject.getMockUser(), 'test', 1)
+    yield db.session.query(Device).get(1)
 
 
 def test_add_data_to_device(device):
@@ -45,3 +42,12 @@ def test_do_not_detect_anomaly(device):
     device_object.addData(str(new_entry_time), last_entry.value)
 
     assert (not device_object.anomalyCheck(new_entry_time))
+
+
+def test_monthly_consumption(device):
+    device_object = DeviceObject(UserObject.getMockUser(), device.id)
+    real_consumption, real_avg_consumption = device_object.getMonthlyConsumption(year=2016, month=1)
+    predicted_consumption, predicted_avg_consumption = device_object.getMonthlyPrediction(year=2016, month=1)
+
+    assert (real_consumption * 0.75 < predicted_consumption < real_consumption * 1.25)
+    assert (real_avg_consumption * 0.75 < predicted_avg_consumption < real_avg_consumption * 1.25)
