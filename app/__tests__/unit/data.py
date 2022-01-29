@@ -13,7 +13,7 @@ from random import randint
 @pytest.fixture
 def device():
     Meter.exportCsvToDatabase(UserObject.getMockUser(), 'test', 1)
-    yield db.session.query(Device).get(6)
+    yield db.session.query(Device).get(1)
 
 
 def test_add_data_to_device(device):
@@ -46,10 +46,8 @@ def test_do_not_detect_anomaly(device):
 
 def test_monthly_consumption(device):
     device_object = DeviceObject(UserObject.getMockUser(), device.id)
-    real_consumption, real_avg_consumption = device_object.getMonthlyConsumption(year=2015, month=1)
-    real_consumption *= 10
-    real_avg_consumption *= 10
+    real_consumption, real_avg_consumption = 300, 10
     predicted_consumption, predicted_avg_consumption = device_object.getMonthlyPrediction(year=2015, month=1)
 
-    assert (real_consumption * 0.1 < predicted_consumption < real_consumption * 100)
-    assert (real_avg_consumption * 0.1 < predicted_avg_consumption < real_avg_consumption * 100)
+    assert (real_consumption * 0.75 < predicted_consumption < real_consumption * 1.25)
+    assert (real_avg_consumption * 0.75 < predicted_avg_consumption < real_avg_consumption * 1.25)
