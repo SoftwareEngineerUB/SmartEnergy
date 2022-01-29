@@ -75,6 +75,4 @@ class UserObject:
 
             print(f"device {device.device_id} done")
 
-        print(len(devicesToBeOptimized))
-
         return devicesToBeOptimized
