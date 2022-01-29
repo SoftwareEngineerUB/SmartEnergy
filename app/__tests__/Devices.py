@@ -5,13 +5,13 @@ from app.models import Device
 from datetime import datetime
 
 
-def _test_get_devices(client):
+def test_get_devices(client):
     devices = client.get("/devices").json
 
     assert (bool(devices))
 
 
-def _test_add_device(client):
+def test_add_device(client):
     device_data = dict(
         name="test device"
     )
@@ -33,7 +33,7 @@ def _test_add_device(client):
     assert (len(devices) == number_of_devices_before_add + 1)
 
 
-def _test_get_device(client):
+def test_get_device(client):
     device_data = dict(
         name="test device"
     )
