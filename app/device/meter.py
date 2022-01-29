@@ -25,7 +25,7 @@ class Meter:
     @staticmethod
     def exportCsvToDatabase(user: User, year=2016, meter_id=1):
         devices = dict()
-        with open(f"/demo-data/{year}/meter{meter_id}.csv", "r") as f:
+        with open(f"demo-data/{year}/meter{meter_id}.csv", "r") as f:
             file_contents = csv.DictReader(f)
 
             for field in file_contents.fieldnames:
