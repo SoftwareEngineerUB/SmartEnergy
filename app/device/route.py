@@ -1,21 +1,23 @@
+from datetime import datetime
 import json
 
 from flask import Blueprint, jsonify, request
+from flask import Response
 
 from app.device.device import DeviceObject
 from app.device.meter import Meter
 from app.user.user import UserObject
 from app.util.ML.data_manipulator import setDataForTrain
 
+
 app_device = Blueprint('device', __name__)
 
 
-# TODO: not working
 @app_device.route("/device/internal/generate_train_data", methods=['GET'])
 def generate_train_data():
     key = int(request.args.get("key", 0))
     if key != 1234:
-        return "Unauthorized"
+        return Response("Unauthorized", status=403)
 
     meter = Meter(UserObject.getMockUser())
     for device in meter.devices:
@@ -23,37 +25,38 @@ def generate_train_data():
         setDataForTrain(deviceObj)
 
         print(f"Device with id={device.id} done")
-    return "Done"
+    return Response("Done", status=200)
 
 
 # Statistics for Devices
-@app_device.route("/device/left_running", methods=['GET'])
-def getIsDeviceLeftRunning():
-    device_id = int(request.args.get("id", 0))
-    if device_id == 0:
-        return jsonify("Bad argument")
+@app_device.route("/device/predict_left_running", methods=['GET'])
+def predictIsDeviceLeftRunning():
+    device_id = int(request.args.get("id", -1))
+    if device_id == -1:
+        return Response(jsonify("Bad argument"), status=400)
 
     device = DeviceObject(UserObject.getMockUser(), device_id)
-    return jsonify(device.isDeviceLeftRunning())
+    return jsonify(device.predictDeviceLeftRunning())
 
 
 @app_device.route('/device/predict_consumption', methods=['GET'])
 def getDeviceConsumption():
     start_time = request.args.get("start-time", '2015-01-01 00:30:00')
     end_time = request.args.get("start-time", '2015-01-01 06:30:00')
-    device_id = int(request.args.get("id", 0))
+    device_id = int(request.args.get("id", -1))
 
-    if device_id == 0:
-        return jsonify("Bad argument")
+    if device_id == -1:
+        return Response(jsonify("Bad argument"), status=400)
 
     device = DeviceObject(UserObject.getMockUser(), device_id)
     return str(device.predictConsumption(start_time, end_time))
 
 
-@app_device.route('/anomaly/check', methods=['GET'])
-def mockAnomalyCheck():
+@app_device.route('/device/anomaly_check', methods=['GET'])
+def getAnomalyCheck():
+    
     device = DeviceObject(UserObject.getMockUser(), 1)
-    timestamp = '2015-01-01 00:30:00'
+    timestamp = request.args.get("timestamp", datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
 
     return jsonify(device.anomalyCheck(timestamp))
 
