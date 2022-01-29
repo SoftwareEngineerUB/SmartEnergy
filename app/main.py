@@ -8,11 +8,11 @@ from app.util.database import Database
 
 
 # Initiate server
-def initiateFlask():
+def initiateFlask(testing=False):
     # Initiate app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(SECRET_KEY='dev')
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.sqlite'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{'app-test' if testing else 'app'}.sqlite"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
     # Register blueprints
@@ -23,9 +23,9 @@ def initiateFlask():
     Database.initiateDatabase(app)
 
     # Initiate mqtt
-    initiateMqtt(app)
+    # initiateMqtt(app)
 
     # Initiate mqtt scheduler
-    MqttHub.handle.initialize_scheduler()
+    # MqttHub.handle.initialize_scheduler()
 
     return app

@@ -1,4 +1,3 @@
-import json
 import random
 import uuid
 from typing import Optional
@@ -37,19 +36,22 @@ class DeviceObject:
 
         return device
 
-    def update(self, new_device):
-        queryString = f"UPDATE device SET `alias` = '{new_device['alias']}', `description` = '{new_device['description']}' WHERE `id` = {new_device['id']}"
-        query = text(queryString)
-        db.engine.execute(query)
+    @staticmethod
+    def find(device_id):
+        return db.session.query(Device).filter_by(id=device_id).first()
+
+    def update(self, updated_device):
+        self.device.alias = updated_device['alias']
+        self.device.description = updated_device['description']
+        db.session.commit()
 
         self.load()
 
         return self.device
 
     def delete(self):
-        queryString = f"DELETE FROM device WHERE `id` = {self.device_id}"
-        query = text(queryString)
-        db.engine.execute(query)
+        db.session.delete(self.device)
+        db.session.commit()
 
     def load(self):
         device = db.session.query(Device).filter_by(user_id=self.user.id, id=self.device_id).first()
@@ -63,6 +65,7 @@ class DeviceObject:
         )
         db.session.add(data)
         db.session.commit()
+        self.load()
 
     def updateSettings(self, new_settings):
         """Raw method for updating a device's settings"""
@@ -93,7 +96,7 @@ class DeviceObject:
         """Assign a channel to a device\n
             Note that the channel can coincide with other deivces' channels,
             and all the runtime-schedule intervals will be inherited\n
-            If not sure, set a diffferent channel for every device
+            If not sure, set a different channel for every device
             If the channel is not provided, a random ID will be selected"""
 
         if channel is None:
