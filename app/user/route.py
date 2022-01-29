@@ -26,4 +26,4 @@ def getUnoptimizedDevices():
 
     userObj = UserObject(UserObject.getMockUser())
 
-    return jsonify(userObj.getUnoptimizedDevices(2015, 3))
+    return jsonify(userObj.getUnoptimizedDevices(year, month))
