@@ -1,9 +1,10 @@
 import pytest
 
 from app.main import initiateFlask
+from app.models.db import db
 
 context = dict(
-    app=initiateFlask(),
+    app=initiateFlask(True),
 )
 
 
