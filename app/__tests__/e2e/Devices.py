@@ -74,3 +74,21 @@ def _test_add_device_data(client):
     ))
 
     assert (bool(device_data_response))
+
+
+def test_get_is_device_left_running(client):
+    device_data = dict(
+        alias="this is a test device"
+    )
+
+    device: Device = client.post("/device",
+                                 json=device_data).json
+
+    response = client.get("/device/left_running",
+                          query_string=dict(
+                              id=device['id']
+                          ))
+
+    print(response)
+    
+    # TODO: expect it to not be running, and then turn it on / off & test
