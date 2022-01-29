@@ -24,7 +24,6 @@ class UserObject:
         devices = [DeviceObject(self.user, device.id) for device in devices]
 
         max_consumption = 0
-        max_avg_consumption = 0
         max_id = 0
 
         statistics = dict()
@@ -36,7 +35,6 @@ class UserObject:
 
             if total_consumption > max_consumption:
                 max_consumption = total_consumption
-                max_avg_consumption = mean_daily_consumption
                 max_id = device.device_id
 
             statistics['devices consumption'].append({
@@ -70,7 +68,7 @@ class UserObject:
                     "device name: ": device.device.alias.split("[kW]")[0],
                     "predicted consumption: ": total_prediction,
                     "real consumption: ": total_real,
-                    "tip: ": "Reduce the consumption by keeping the old habbits"
+                    "tip: ": "Reduce the consumption by keeping the old habits"
                 })
 
             print(f"device {device.device_id} done")

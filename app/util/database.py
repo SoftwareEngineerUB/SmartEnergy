@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_migrate import Migrate
-from random import randint
+from random import random
 from datetime import datetime
 from dateutil.parser import parse
 
@@ -51,31 +51,6 @@ class Database:
         db.session.query(Event).delete()
         db.session.query(User).delete()
         db.session.commit()
-
-    @staticmethod
-    def addTestingData(device,
-                       start_date='2015-01-01',
-                       end_date='2015-01-30',
-                       data_count=1000,
-                       min_value=1,
-                       max_value=100,
-                       min_change=-5,
-                       max_change=5):
-        start_time = parse(start_date).timestamp()
-        end_time = parse(end_date).timestamp()
-        data_value = randint(min_value, max_value)
-
-        for timestamp in range(int(start_time), int(end_time), int((end_time - start_time) / data_count)):
-            data = Data(
-                time=datetime.fromtimestamp(timestamp),
-                value=data_value,
-                device_id=device.id
-            )
-            data_value = min(max(data_value + randint(min_change, max_change), min_value), max_value)
-            db.session.add(data)
-
-        db.session.commit()
-        db.session.flush()
 
     @staticmethod
     def initiateDatabase(app):
