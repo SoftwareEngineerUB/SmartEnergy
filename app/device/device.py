@@ -1,4 +1,3 @@
-import json
 import random
 import uuid
 from typing import Optional
@@ -66,6 +65,7 @@ class DeviceObject:
         )
         db.session.add(data)
         db.session.commit()
+        self.load()
 
     def updateSettings(self, new_settings):
         """Raw method for updating a device's settings"""
@@ -96,7 +96,7 @@ class DeviceObject:
         """Assign a channel to a device\n
             Note that the channel can coincide with other deivces' channels,
             and all the runtime-schedule intervals will be inherited\n
-            If not sure, set a diffferent channel for every device
+            If not sure, set a different channel for every device
             If the channel is not provided, a random ID will be selected"""
 
         if channel is None:
