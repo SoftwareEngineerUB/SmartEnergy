@@ -35,7 +35,7 @@
  - [ ] Comunicarea dintre mai multe device-uri care se afla in aceeasi cladire 
  - [x] Alertarea utilizatorilor asupra utilizarii energiei in mod ineficient.
  - [x] Interactiune automata - inchidere si pornirea device-urilor in functie de setarile utilizatorului 
- - [ ] Sfaturi de micsorare a consumului
+ - [x] Sfaturi de micsorare a consumului
  - [ ] Invatare automata a obiceiurilor utilizatorului pentru a interactiona cu device-urile si a reduce consumul
  - [ ] Conectarea cu alte device-uri smart pentru a prelua informatii de utilizare a acestora
  - [ ] Eficientizarea operatiilor pentru a reduce energia consumata de catre sursa
