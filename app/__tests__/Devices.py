@@ -5,15 +5,15 @@ from app.models import Device
 from datetime import datetime
 
 
-def _test_get_devices(client):
-    devices = client.get("/devices").json
+def test_get_devices(client):
+    devices = client.get("/devices")
 
     assert (bool(devices))
 
 
-def _test_add_device(client):
+def test_add_device(client):
     device_data = dict(
-        name="test device"
+        alias="this is a test device"
     )
 
     devices = client.get("/devices").json
@@ -21,11 +21,11 @@ def _test_add_device(client):
     number_of_devices_before_add = len(devices)
 
     device: Device = client.post("/device",
-                                 json=json.dumps(device_data)).json
+                                 json=device_data).json
 
     assert (bool(device))
 
-    assert (device['alias'] == device_data['name'])
+    assert (device['alias'] == device_data['alias'])
     assert (bool(device['uuid']))
 
     devices = client.get("/devices").json
@@ -33,24 +33,24 @@ def _test_add_device(client):
     assert (len(devices) == number_of_devices_before_add + 1)
 
 
-def _test_get_device(client):
+def test_get_device(client):
     device_data = dict(
-        name="test device"
+        alias="this is a test device"
     )
 
     inserted_device: Device = client.post("/device",
-                                          json=json.dumps(device_data)).json
+                                          json=device_data).json
 
     device = client.get("/device", query_string=dict(id=inserted_device['id'])).json
 
     assert (bool(device))
 
-    assert (device['alias'] == device_data['name'])
+    assert (device['alias'] == device_data['alias'])
 
 
 def test_add_device_data(client):
     device_data = dict(
-        name="test device"
+        alias="this is a test device"
     )
 
     device_insert_data = dict(
@@ -59,12 +59,12 @@ def test_add_device_data(client):
     )
 
     inserted_device: Device = client.post("/device",
-                                          json=json.dumps(device_data)).json
+                                          json=device_data).json
 
     device_insert_data["id"] = inserted_device["id"]
 
     _ = client.post("/device/data",
-                    json=json.dumps(device_insert_data)).json
+                    json=device_insert_data).json
 
     device_data_response = client.get("/device/data", query_string=dict(
         id=inserted_device["id"],
@@ -72,4 +72,4 @@ def test_add_device_data(client):
         per_page=50
     ))
 
-    print(device_data_response)
+    assert (bool(device_data_response))
