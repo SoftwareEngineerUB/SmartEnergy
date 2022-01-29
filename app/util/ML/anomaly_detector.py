@@ -73,6 +73,8 @@ class AnomalyDetector():
         if self.cuda:
             self.model.to(DEVICE)
 
+        self.max_loss = np.random.randint(30, 3000)
+
         self.load_model()
         self.load_model_info()
 
