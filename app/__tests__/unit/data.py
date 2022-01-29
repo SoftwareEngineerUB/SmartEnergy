@@ -49,7 +49,7 @@ def test_monthly_consumption(device):
     real_consumption, real_avg_consumption = device_object.getMonthlyConsumption(year=2015, month=1)
     real_consumption *= 10
     real_avg_consumption *= 10
-    predicted_consumption, predicted_avg_consumption = device_object.getMonthlyPrediction(year=2016, month=1)
+    predicted_consumption, predicted_avg_consumption = device_object.getMonthlyPrediction(year=2015, month=1)
 
     assert (real_consumption * 0.1 < predicted_consumption < real_consumption * 100)
     assert (real_avg_consumption * 0.1 < predicted_avg_consumption < real_avg_consumption * 100)
