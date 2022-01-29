@@ -1,5 +1,3 @@
-import json
-
 from app.models import Device
 
 from datetime import datetime
