@@ -27,3 +27,4 @@ def run_before_all_tests():
 def client():
     with context['app'].test_client() as client:
         return client
+    
