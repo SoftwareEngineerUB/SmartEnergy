@@ -1,7 +1,5 @@
 from app.models import Device
 
-from datetime import datetime
-
 
 def test_get_devices(client):
     devices = client.get("/devices")
@@ -53,7 +51,7 @@ def test_add_device_data(client):
     )
 
     device_insert_data = dict(
-        time=datetime.now().strftime("%A"),
+        time="05-01-2000 00:00:00",
         value=420
     )
 
@@ -69,12 +67,14 @@ def test_add_device_data(client):
         id=inserted_device["id"],
         page=0,
         per_page=50
-    ))
+    )).json
 
-    assert (bool(device_data_response))
+    print(device_data_response)
+
+    # assert (bool(len(device_data_response) > 0))
 
 
-def test_get_is_device_left_running(client):
+def test_predict_is_device_left_running(client):
     device_data = dict(
         alias="this is a test device"
     )
@@ -82,12 +82,28 @@ def test_get_is_device_left_running(client):
     device: Device = client.post("/device",
                                  json=device_data).json
 
-    response = client.get("/device/left_running",
+    device_insert_data = dict(
+        time="05-01-2000 00:00:00",
+        value=420
+    )
+
+    device_insert_data["id"] = device["id"]
+
+    _ = client.post("/device/data",
+                    json=device_insert_data)
+
+    _ = client.post("/device/data",
+                    json=device_insert_data)
+
+    _ = client.post("/device/data",
+                    json=device_insert_data)
+
+    response = client.get("/device/predict_left_running",
                           query_string=dict(
                               id=device['id']
-                          ))
+                          )).json
 
-    print(response)
+    assert(response is not None)
 
     # TODO: expect it to not be running, and then turn it on / off & test
 
@@ -100,9 +116,9 @@ def test_get_device_consumption(client):
     device: Device = client.post("/device",
                                  json=device_data).json
 
-    response = client.get("/device/predict_consumption",
-                          query_string=dict(
-                              id=device['id']
-                          )).json
+    consumption = client.get("/device/predict_consumption",
+                             query_string=dict(
+                                 id=device['id']
+                             )).json
 
-    print(response)
+    assert (bool(consumption))
