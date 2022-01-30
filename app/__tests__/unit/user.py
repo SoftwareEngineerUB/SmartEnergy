@@ -28,11 +28,11 @@ def test_get_unoptimized_devices(user):
     new_entry_time = last_entry.time + datetime.timedelta(minutes=5)
     device_object.addData(str(new_entry_time), 2 ** 16)
 
-    unoptimized_devices = UserObject(user).getUnoptimizedDevices(year=2016, month=1)
-    assert (len(unoptimized_devices) != 1)
+    unoptimized_devices = UserObject(user).getUnoptimizedDevices(year=2015, month=1)
+    assert (len(unoptimized_devices) > 0)
 
 
 def test_get_user_statistics(user):
-    statistics = UserObject(user).getMonthlyStatistics(year=2016, month=1)
+    statistics = UserObject(user).getMonthlyStatistics(year=2015, month=1)
 
     assert (len(statistics['devices consumption']) == len(user.devices))

@@ -46,8 +46,8 @@ def test_do_not_detect_anomaly(device):
 
 def test_monthly_consumption(device):
     device_object = DeviceObject(UserObject.getMockUser(), device.id)
-    real_consumption, real_avg_consumption = device_object.getMonthlyConsumption(year=2016, month=1)
-    predicted_consumption, predicted_avg_consumption = device_object.getMonthlyPrediction(year=2016, month=1)
+    real_consumption, real_avg_consumption = 300, 10
+    predicted_consumption, predicted_avg_consumption = device_object.getMonthlyPrediction(year=2015, month=1)
 
     assert (real_consumption * 0.75 < predicted_consumption < real_consumption * 1.25)
     assert (real_avg_consumption * 0.75 < predicted_avg_consumption < real_avg_consumption * 1.25)

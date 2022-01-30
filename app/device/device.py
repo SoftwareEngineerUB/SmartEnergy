@@ -203,8 +203,8 @@ class DeviceObject:
         end_day = (end_time - relativedelta(days=1)).day
         days_elapsed = end_day - day
 
-        anomalyDtector = AnomalyDetector(self.device_id)
-        total_consumption = anomalyDtector.predictConsumption(str(start_time), str(end_time))
+        anomalyDetector = AnomalyDetector(self.device_id)
+        total_consumption = anomalyDetector.predictConsumption(str(start_time), str(end_time))
         avg_consumption = total_consumption / days_elapsed
 
-        return total_consumption, avg_consumption
+        return abs(total_consumption), abs(avg_consumption)
