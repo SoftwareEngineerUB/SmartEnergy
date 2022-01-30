@@ -223,5 +223,5 @@ class AnomalyDetector():
             current_time = current_time + datetime.timedelta(minutes=30)
             
         total_consumption = sum(consumption_arr)
-    
-        return total_consumption / self.mul_parameter # KW
+
+        return total_consumption / self.mul_parameter  # KW

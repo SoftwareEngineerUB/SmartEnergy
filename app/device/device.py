@@ -63,8 +63,12 @@ class DeviceObject:
             value=value,
             device_id=self.device_id,
         )
+
         db.session.add(data)
         db.session.commit()
+        db.session.flush()
+        db.session.refresh(data)
+
         self.load()
 
     def updateSettings(self, new_settings):
@@ -161,6 +165,7 @@ class DeviceObject:
 
         data = [dict(row.items()) for row in cursor]
         data = [[datapoint['time'], datapoint['value']] for datapoint in data]
+
         if len(data) < 0:
             return False
 

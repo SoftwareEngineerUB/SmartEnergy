@@ -49,7 +49,8 @@ def getDeviceConsumption():
         return Response(jsonify("Bad argument"), status=400)
 
     device = DeviceObject(UserObject.getMockUser(), device_id)
-    return str(device.predictConsumption(start_time, end_time))
+
+    return jsonify(str(device.predictConsumption(start_time, end_time)))
 
 
 @app_device.route('/device/anomaly_check', methods=['GET'])
@@ -112,13 +113,14 @@ def deleteDevice():
 
 @app_device.route('/device/data', methods=['POST'])
 def addDeviceData():
-    data = json.loads(request.json)
+    data = request.json
 
     device_id = int(data["id"])
     time = data["time"]
     value = float(data["value"])
 
     device = DeviceObject(UserObject.getMockUser(), device_id)
+
     device.addData(time, value)
 
     return jsonify(device.device.json())
