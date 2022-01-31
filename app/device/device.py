@@ -53,6 +53,8 @@ class DeviceObject:
         db.session.delete(self.device)
         db.session.commit()
 
+        return True
+
     def load(self):
         device = db.session.query(Device).filter_by(user_id=self.user.id, id=self.device_id).first()
         self.device = device
@@ -70,6 +72,8 @@ class DeviceObject:
         db.session.refresh(data)
 
         self.load()
+
+        return True
 
     def updateSettings(self, new_settings):
         """Raw method for updating a device's settings"""

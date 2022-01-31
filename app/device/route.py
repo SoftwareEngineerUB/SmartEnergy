@@ -61,7 +61,7 @@ def getAnomalyCheck():
     except:
         return Response("Invalid parameters", status=403)
     if device_id == -1:
-        return Response("Invalid parametrs", response=403)
+        return Response("Invalid parameters", status=403)
 
     device = DeviceObject(UserObject.getMockUser(), device_id)
     return jsonify(device.anomalyCheck(timestamp))
@@ -111,9 +111,9 @@ def deleteDevice():
     request_data = request.json
 
     device = DeviceObject(UserObject.getMockUser(), request_data['id'])
-    device.delete()
+    response = device.delete()
 
-    return jsonify(True)
+    return jsonify(response)
 
 
 @app_device.route('/device/data', methods=['POST'])
@@ -126,9 +126,9 @@ def addDeviceData():
 
     device = DeviceObject(UserObject.getMockUser(), device_id)
 
-    device.addData(time, value)
+    response = device.addData(time, value)
 
-    return jsonify(device.device.json())
+    return jsonify(response)
 
 
 @app_device.route('/device/data', methods=['GET'])
