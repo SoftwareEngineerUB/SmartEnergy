@@ -1,8 +1,5 @@
 from flask import Flask
 from flask_migrate import Migrate
-from random import random
-from datetime import datetime
-from dateutil.parser import parse
 
 from app.device.meter import Meter
 from app.models import User, Device, Data, Event
@@ -12,17 +9,15 @@ from app.models.db import db
 class Database:
     @staticmethod
     def importRelevantData(app, testing=False):
-        # Migrate database
-        migrate = Migrate(app, db)
-
-        # Initiate database
-        db.init_app(app)
         with app.app_context():
+            # Migrate database
+            migrate = Migrate(app, db)
+
+            # Initiate database
+            db.init_app(app)
             db.create_all()
-        migrate.init_app(app)
+            migrate.init_app(app)
 
-        with app.app_context():
-            # Create or select user
             username = 'mock-user'
             user = db.session.query(User).filter_by(username=username).first()
             if user is None:
@@ -32,13 +27,12 @@ class Database:
                 db.session.commit()
 
             # Export meter data
-
-        if not testing:
-            for year in [2014, 2015, 2016]:
-                for meter_id in range(1, 4):
-                    if meter_id == 3 and year == 2014:
-                        continue
-                    Meter.exportCsvToDatabase(user, year, meter_id)
+            if not testing:
+                for year in [2014, 2015, 2016]:
+                    for meter_id in range(1, 4):
+                        if meter_id == 3 and year == 2014:
+                            continue
+                        Meter.exportCsvToDatabase(user, year, meter_id)
 
     @staticmethod
     def cleanDatabase():
