@@ -12,7 +12,7 @@ from app.models.db import db
 from app.mqtt.mqtt_message import MqttMesssage, SetEnergyLevelSignal, ShutdownSignal, StartupSignal
 
 # TODO remove after testing
-SECONDS_PER_HOUR = 3
+SECONDS_PER_HOUR = 10
 
 
 class ScheduleState:

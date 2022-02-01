@@ -22,7 +22,7 @@ class Client:
             self.print(f"connection failed: {rc}")
 
     def on_message(self, client, userdata, message: mqtt_client.MQTTMessage):
-        self.print(f"Message on topic [{message.topic}] received: {pickle.loads(message)}")
+        self.print(f"Message on topic [{message.topic}] received: {pickle.loads(message.payload)}")
 
     def listener_loop(self):
 
@@ -60,4 +60,5 @@ class Client:
         self.client = mqtt_client.Client(self.id)
 
         self.client.on_connect = self.on_connect
+        self.client.on_message = self.on_message
         self.listener = Thread(target = self.listener_loop, daemon = True)
