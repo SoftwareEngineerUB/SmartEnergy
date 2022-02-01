@@ -9,6 +9,7 @@ from flask_mqtt import Mqtt
 
 from app.models import Device, User
 from app.models.db import db
+from app.mqtt.mqtt_message import SetEnergyLevelSignal, ShutdownSignal, StartupSignal
 
 # TODO remove after testing
 SECONDS_PER_HOUR = 3
@@ -78,11 +79,21 @@ class ScheduleHandlers:
         global_channel = current_state.info["global_channel"]
         current_state.info_lock.release()
 
-        current_state.assign_publish(global_channel, "<<SHUTDOWN>>")
+        current_state.assign_publish(global_channel, ShutdownSignal().pack())
         current_state.notify()
 
-    def time_interval_tracker(current_state: ScheduleState, device_uuid):
-        """Time interval tracker, for a specific device"""
+    def global_startup(current_state: ScheduleState):
+        """Global startup broadcast"""
+
+        current_state.info_lock.acquire()
+        global_channel = current_state.info["global_channel"]
+        current_state.info_lock.release()
+
+        current_state.assign_publish(global_channel, StartupSignal().pack())
+        current_state.notify()
+
+    def schedule_tracker(current_state: ScheduleState, device_uuid):
+        """Enforces schedule for a specific device"""
 
         current_state.info_lock.acquire()
 
@@ -91,9 +102,7 @@ class ScheduleHandlers:
 
         current_state.info_lock.release()
 
-        intervals.sort(key=lambda i: f"{i[0]}{i[1]}")
-
-        # LOTS AND LOTS OF TIME ARITHMETIC AHEAD
+        intervals.sort(key = lambda i: f"{i[0]}{i[1]}")
 
         idx = 0
         hour = int(time.strftime("%H"), 10)
@@ -111,11 +120,56 @@ class ScheduleHandlers:
 
         while True:
 
-            current_state.assign_publish(channel, b"<<START>>")
+            current_state.assign_publish(channel, StartupSignal().pack())
             time.sleep((intervals[idx][1] - intervals[idx][0]) * SECONDS_PER_HOUR)
             current_state.notify()
 
-            current_state.assign_publish(channel, b"<<SHUTDOWN>>")
+            current_state.assign_publish(channel, ShutdownSignal().pack())
+
+            lo = intervals[idx][1]
+
+            idx = (idx + 1) % len(intervals)
+            hi = intervals[idx][0]
+
+            delta = hi - lo
+            if hi < lo:
+                delta += 24
+
+            time.sleep(delta * SECONDS_PER_HOUR)
+
+    def power_schedule_tracker(current_state: ScheduleState, device_uuid):
+        """Enforces ACPI schedule for a specific device"""
+
+        current_state.info_lock.acquire()
+
+        channel = current_state.info[device_uuid]["channel"]
+        intervals = deepcopy(current_state.info[device_uuid]["power_schedule"])
+
+        current_state.info_lock.release()
+
+        intervals.sort(key = lambda i: f"{i[0]}{i[1]}")
+
+        idx = 0
+        hour = int(time.strftime("%H"), 10)
+        delta = 0
+
+        if hour > intervals[-1][0]:
+            delta += 24 - hour
+            hour = 0
+
+        while intervals[idx][0] < hour:
+            idx += 1
+        delta += intervals[idx][0] - hour
+
+        time.sleep(delta * SECONDS_PER_HOUR)
+
+        while True:
+
+            current_state.assign_publish(channel, SetEnergyLevelSignal(intervals[idx][3]).pack())
+            time.sleep((intervals[idx][1] - intervals[idx][0]) * SECONDS_PER_HOUR)
+            current_state.notify()
+
+            current_state.assign_publish(channel, SetEnergyLevelSignal(intervals[idx][2]).pack())
 
             lo = intervals[idx][1]
 
@@ -156,8 +210,10 @@ class ScheduleHandlers:
 
     call = {
         "alarm": alarm,
-        "time_interval_tracker": time_interval_tracker,
+        "schedule_tracker": schedule_tracker,
+        "power_schedule_tracker": power_schedule_tracker,
         "global_shutdown": global_shutdown,
+        "global_startup": global_startup,
         "always_true": lambda _: True,
         "default_content": lambda _: b"uninitialized content",
         "random_notifier": lambda _: f"random message {randint(0, 10000)}"
@@ -225,6 +281,8 @@ class DeviceScheduler:
 
                 # NOTE: since the state object is currently referenced only here
                 #       the locks are not (yet) used
+            
+                initial_state.assign_exec_sync("global_startup")
 
                 for device in db.session.query(Device).filter_by(user_id=user.id):
                     self.parse_device_settings(device, initial_state)

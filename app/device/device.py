@@ -95,6 +95,18 @@ class DeviceObject:
 
         self.updateSettings({"schedule": time_intervals})
 
+    def addRuntimePowerSchedule(self, time_intervals: list):
+        """Add power schedule for this device (ACPI standard)\n
+            Almost the same as shutdown/startup schedule\n
+            Eg. time_intervals = [(8, 11, "D0", "D2"), (19, 20, "D3HOT", "D1")]\n
+                means the device will run in D2 mode between 8am and 11am, \
+                and then its mode will reset to D2,\n
+                then it will run in D3 hot mode between 7pm and 8pm, \
+                and then its mode will reset to D1\n
+            NOTE: the intervals MUST be disjoint"""
+
+        self.updateSettings({"power_schedule": time_intervals})
+
     def setAlwaysOn(self, status=True):
         """Set a device to always be on, ignoring any schedule or global shutdown message"""
 
