@@ -52,6 +52,39 @@ def getStatistics():
 
 @app_user.route("/user/unoptimized_devices")
 def getUnoptimizedDevices():
+    """
+    Returns which devices can be optimized for a better energy consumption
+    ---
+
+    parameters:
+      - name: month
+        in: query
+        description: the month for which the statistics are wanted
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: year
+        in: query
+        description: the year for which the statistics are wanted
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: a list of consumption data for each device with energy reduction tips
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnoptimizedDevice'
+        "400":
+          description: Invalid request 
+    """
     month = int(request.args.get("month", '-1'))
     year = int(request.args.get("year", "-1"))
     if month == -1 or year == -1:
