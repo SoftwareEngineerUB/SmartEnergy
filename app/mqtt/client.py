@@ -46,12 +46,12 @@ class Client:
     def start(self):
         self.listener.start()
 
-    def __init__(self, config, name, device: Device):
+    def __init__(self, config, device: Device):
 
         self.config = config
 
         self.device = device
-        self.name = name
+        self.name = self.device.alias
         self.id = f"{self.name}_{randint(0, 0xffffffff)}"
 
         self.global_channel = f"{self.config['global_channel_prefix']}_{self.device.user_id}"

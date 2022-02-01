@@ -5,6 +5,7 @@ from flask import Flask
 from app.mqtt.broker import Broker
 from app.mqtt.device_scheduler import DeviceScheduler
 from app.mqtt.client import Client
+from app.models.user import User
 from app.models.device import Device
 from app.models.db import db
 
@@ -50,7 +51,7 @@ class MqttHub:
 
         device = db.session.query(Device).filter_by(alias=name, user_id=user_id).first()
 
-        self.clients.update({name: Client(self.config, name, device)})
+        self.clients.update({name: Client(self.config, device)})
         return self.clients[name]
 
     def initialize_scheduler(self):
@@ -63,7 +64,13 @@ class MqttHub:
     def watch_clients(self):
         """Emulate device I/O"""
 
-        for name, client in self.clients.items():
+        with self.app.app_context():
+            for user in db.session.query(User).all():
+
+                for device in db.session.query(Device).filter_by(user_id=user.id):
+                    self.create_client(device.alias, device.user_id)
+
+        for client in self.clients.values():
             client.start()
 
 def initiateMqtt(app):
