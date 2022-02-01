@@ -10,31 +10,31 @@ def getStatistics():
     Returns consumption data for all devices for a given month in a year
     ---
     parameters:
-      - name: month
-        in: query
+      - in: query 
+        name: month
+        schema:
+            required: false
+            type: integer
+            format: int32
         description: the month for which the statistics are wanted
-        required: false
         style: form
         explode: true
+        
+      - in: query
+        name: year
         schema:
+          required: false
           type: integer
           format: int32
-      - name: year
-        in: query
         description: the year for which the statistics are wanted
-        required: false
         style: form
         explode: true
-        schema:
-          type: integer
-          format: int32
+        
       responses:
         "200":
           description: a list of consumption data for each device
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DeviceStatistics'
+            application/json
         "400":
           description: Invalid request
     """
