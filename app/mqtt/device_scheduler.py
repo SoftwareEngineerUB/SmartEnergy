@@ -111,11 +111,11 @@ class ScheduleHandlers:
 
         while True:
 
-            current_state.assign_publish(channel, "<<START>>")
+            current_state.assign_publish(channel, b"<<START>>")
             time.sleep((intervals[idx][1] - intervals[idx][0]) * SECONDS_PER_HOUR)
             current_state.notify()
 
-            current_state.assign_publish(channel, "<<SHUTDOWN>>")
+            current_state.assign_publish(channel, b"<<SHUTDOWN>>")
 
             lo = intervals[idx][1]
 
