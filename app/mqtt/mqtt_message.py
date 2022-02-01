@@ -20,6 +20,10 @@ class MqttMesssage:
     def pack(self) -> bytes:
         return pickle.dumps(self)
 
+    def __repr__(self):
+        return f"[MQTT ({'non-urgent' if self.urgent else 'urgent'})" + \
+                    f"message (sender: {self.sender}, flags {self.flags}): {self.payload}"
+
 class ShutdownSignal(MqttMesssage):
     """Equivalent to ACPI level D3 hot"""
 

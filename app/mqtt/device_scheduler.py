@@ -215,8 +215,8 @@ class ScheduleHandlers:
         "global_shutdown": global_shutdown,
         "global_startup": global_startup,
         "always_true": lambda _: True,
-        "default_content": lambda _: MqttMesssage(payload = f"ping {randint(0, 10000)}").pack(),
-        "ping_alive": lambda _: MqttMesssage(payload = f"ping {randint(0, 10000)}").pack()
+        "default_content": lambda _: MqttMesssage(payload = f"ping {randint(0, 10000)}", sender = "sched").pack(),
+        "ping_alive": lambda _: MqttMesssage(payload = f"ping {randint(0, 10000)}", sender = "sched").pack()
     }
     """Function dispatcher"""
 
@@ -290,7 +290,7 @@ class DeviceScheduler:
                 for device in db.session.query(Device).filter_by(user_id=user.id):
                     self.parse_device_settings(device, initial_state)
 
-                initial_state.info["global_channel"] = f"{self.config['global_channel_prefix']}_{user.username}"
+                initial_state.info["global_channel"] = f"{self.config['global_channel_prefix']}_{user.id}"
 
                 self.per_user_scheds[user].start()
 
