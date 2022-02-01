@@ -51,7 +51,7 @@ class Client:
         self.config = config
 
         self.device = device
-        self.name = self.device.alias
+        self.name = self.device.alias[:-5]
         self.id = f"{self.name}_{randint(0, 0xffffffff)}"
 
         self.global_channel = f"{self.config['global_channel_prefix']}_{self.device.user_id}"
