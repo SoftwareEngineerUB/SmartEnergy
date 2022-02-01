@@ -1,12 +1,11 @@
 from random import choice, randint
 from flask import Flask
 from flask_migrate import Migrate
-from app.device.device import DeviceObject
 
 from app.device.meter import Meter
+from app.device.device import DeviceObject
 from app.models import User, Device, Data, Event
 from app.models.db import db
-
 
 class Database:
     @staticmethod
