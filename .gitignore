@@ -5,3 +5,5 @@ __pycache__/
 /app/app.sqlite
 /app/app.sqlite-journal
 *.npy
+LOCAL.py
+demo.py

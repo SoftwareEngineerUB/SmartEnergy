@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 import json
 
 from flask import Blueprint, jsonify, request
@@ -40,7 +40,7 @@ def predictIsDeviceLeftRunning():
 
 
 @app_device.route('/device/predict_consumption', methods=['GET'])
-def getDeviceConsumption():
+def getDeviceConsumptionPrediction():
     start_time = request.args.get("start-time", '2015-01-01 00:30:00')
     end_time = request.args.get("start-time", '2015-01-01 06:30:00')
     device_id = int(request.args.get("id", -1))
@@ -55,10 +55,15 @@ def getDeviceConsumption():
 
 @app_device.route('/device/anomaly_check', methods=['GET'])
 def getAnomalyCheck():
-    
-    device = DeviceObject(UserObject.getMockUser(), 1)
-    timestamp = request.args.get("timestamp", datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    try:
+        device_id = int(request.args.get("device_id", -1))
+        timestamp = request.args.get("timestamp", datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    except:
+        return Response("Invalid parameters", status=403)
+    if device_id == -1:
+        return Response("Invalid parameters", status=403)
 
+    device = DeviceObject(UserObject.getMockUser(), device_id)
     return jsonify(device.anomalyCheck(timestamp))
 
 
@@ -106,9 +111,9 @@ def deleteDevice():
     request_data = request.json
 
     device = DeviceObject(UserObject.getMockUser(), request_data['id'])
-    device.delete()
+    response = device.delete()
 
-    return jsonify(True)
+    return jsonify(response)
 
 
 @app_device.route('/device/data', methods=['POST'])
@@ -121,9 +126,9 @@ def addDeviceData():
 
     device = DeviceObject(UserObject.getMockUser(), device_id)
 
-    device.addData(time, value)
+    response = device.addData(time, value)
 
-    return jsonify(device.device.json())
+    return jsonify(response)
 
 
 @app_device.route('/device/data', methods=['GET'])

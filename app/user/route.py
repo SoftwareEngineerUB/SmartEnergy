@@ -12,7 +12,7 @@ def getStatistics():
         return Response("Invalid request", status=400)
 
     userObj = UserObject(UserObject.getMockUser())
-    statistics = userObj.getMonthlyStatistics(2016, 3)
+    statistics = userObj.getMonthlyStatistics(month, year)
 
     return jsonify(statistics)
 

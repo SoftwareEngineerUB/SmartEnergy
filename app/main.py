@@ -23,9 +23,12 @@ def initiateFlask(testing=False):
     Database.initiateDatabase(app)
 
     # Initiate mqtt
-    # initiateMqtt(app)
+    initiateMqtt(app)
 
     # Initiate mqtt scheduler
-    # MqttHub.handle.initialize_scheduler()
+    MqttHub.handle.initialize_scheduler()
+
+    # Start watching mqtt endpoints
+    MqttHub.handle.watch_clients()
 
     return app
