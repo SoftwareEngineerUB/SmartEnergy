@@ -9,7 +9,7 @@ from flask_mqtt import Mqtt
 
 from app.models import Device, User
 from app.models.db import db
-from app.mqtt.mqtt_message import SetEnergyLevelSignal, ShutdownSignal, StartupSignal
+from app.mqtt.mqtt_message import MqttMesssage, SetEnergyLevelSignal, ShutdownSignal, StartupSignal
 
 # TODO remove after testing
 SECONDS_PER_HOUR = 3
@@ -215,8 +215,8 @@ class ScheduleHandlers:
         "global_shutdown": global_shutdown,
         "global_startup": global_startup,
         "always_true": lambda _: True,
-        "default_content": lambda _: b"uninitialized content",
-        "random_notifier": lambda _: f"random message {randint(0, 10000)}"
+        "default_content": lambda _: MqttMesssage(payload = f"ping {randint(0, 10000)}").pack(),
+        "ping_alive": lambda _: MqttMesssage(payload = f"ping {randint(0, 10000)}").pack()
     }
     """Function dispatcher"""
 
@@ -244,6 +244,9 @@ class DeviceScheduler:
 
         if "schedule" in settings.keys():
             state.info[device.uuid]["schedule"] = settings["schedule"]
+
+        if "power_schedule" in settings.keys():
+            state.info[device.uuid]["power_schedule"] = settings["power_schedule"]
 
     def scheduler_loop(self, state: ScheduleState):
         """Main scheduler infinite loop"""
@@ -281,8 +284,8 @@ class DeviceScheduler:
 
                 # NOTE: since the state object is currently referenced only here
                 #       the locks are not (yet) used
-            
-                initial_state.assign_exec_sync("global_startup")
+
+                initial_state.assign_exec_sync("global_startup", {})
 
                 for device in db.session.query(Device).filter_by(user_id=user.id):
                     self.parse_device_settings(device, initial_state)

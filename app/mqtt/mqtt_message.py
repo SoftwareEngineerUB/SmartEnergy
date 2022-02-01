@@ -30,12 +30,12 @@ class StartupSignal(MqttMesssage):
     """Equivalent to ACPI level D0"""
 
     def __init__(self, urgent = False):
-        super(ShutdownSignal, self).__init__(payload = b"<<START>>", sender = b"sched", urgent = urgent, flags = b"")
+        super(StartupSignal, self).__init__(payload = b"<<START>>", sender = b"sched", urgent = urgent, flags = b"")
 
 class SetEnergyLevelSignal(MqttMesssage):
 
     def __init__(self, urgent = False, level = "D0"):
-        super(ShutdownSignal, self).__init__(payload = b"<<POWER>>", sender = b"sched", urgent = urgent, flags = level.encode())
+        super(SetEnergyLevelSignal, self).__init__(payload = b"<<POWER>>", sender = b"sched", urgent = urgent, flags = level.encode())
 
         assert(level in ["D0", "D1", "D2", "D3HOT", "D3COLD"])
         
