@@ -4,12 +4,16 @@
    contain the root `toctree` directive.
 
 Welcome to SmartEnergy's documentation!
+
+For a complete list of features, see :doc:`features <pages/features>`.
+
 =======================================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   pages/features
 
 
 Indices and tables
