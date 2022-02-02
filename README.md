@@ -17,7 +17,7 @@
 ## Despre proiect
 În contextul actualei **crize de mediu** și al încălzirii globale, echipa noastra propune un program **IoT** al cărui scop este de a interacționa cu device-urile smart dintr-o locuință pentru a **eficientiza energia consumată**. În acest sens programul ar putea fi implementat pe o sursa smart de energie (sau pe distribuitori de energie precum un prelungitor) electrica unde ar urma sa comunice cu restul de device-uri smart cu scopul de a realiza **statistici** și a efectua acțiuni ce vor diminua consumul de energie.
 
-Documentatia proiectului poate fi accesata aici: [Documentatie](https://smartenergy.readthedocs.io/en/latest/index.html).
+Documentatia proiectului poate fi accesata aici: [Documentatie Read The Docs](https://smartenergy.readthedocs.io/en/latest/index.html).
 
 Informatii detaliate despre proiect pot fi consultate in cadrul paginii wiki: [Documentului de analiza](https://github.com/SoftwareEngineerUB/SmartEnergy/wiki/Document-de-Analiza-a-aplicatiei-SmartEnergy).
 
