@@ -4,14 +4,9 @@ Features
 
 
 *****************************
-User Consumption Statistics
+User Consumption Reports
 *****************************
 .. automodule:: app.user.route
    :members:
 
 
-*****************************
-Unoptimized devices 
-*****************************
-.. automodule:: app.user.route
-   :members:
