@@ -21,6 +21,15 @@ Documentatia proiectului poate fi accesata aici: [Documentatie](https://smartene
 
 Informatii detaliate despre proiect pot fi consultate in cadrul paginii wiki: [Documentului de analiza](https://github.com/SoftwareEngineerUB/SmartEnergy/wiki/Document-de-Analiza-a-aplicatiei-SmartEnergy).
 
+## Membrii echipa
+
+* Buhai Darius
+* Bulaceanu Alexandra
+* Savu Ioan
+* Rusu Andrei
+* Mitoi Stefan
+* Stanciu Calin
+
 ### Tool-uri folosite
 
 * [Flask](https://flask.palletsprojects.com/en/2.0.x/)
@@ -37,14 +46,14 @@ Informatii detaliate despre proiect pot fi consultate in cadrul paginii wiki: [D
 
 
 Este necesar python3..
-Se poate downloada `aici <https://www.python.org/downloads/>`_. 
-De asemenea `package manager-ul pip <https://pypi.org/project/pip/>`_ trebuie si el instalat.
+Se poate downloada [aici](https://www.python.org/downloads)_. 
+De asemenea [package manager-ul pip](https://pypi.org/project/pip) trebuie si el instalat.
 
 
 ## Mosquitto MQTT Broker
 
 
-Pentru instalare Mosquitto MQTT Broker, se utilizeaza `official page <https://mosquitto.org/download/>`_ si se selecteaza versiunea corespunzatoare sistemului de operare utilizat.
+Pentru instalare Mosquitto MQTT Broker, se utilizeaza [official page](https://mosquitto.org/download) si se selecteaza versiunea corespunzatoare sistemului de operare utilizat.
 
 
 ## Pentru Ubuntu:
@@ -162,10 +171,10 @@ Accesati documentatia [link](https://studio.asyncapi.com/?url=https://raw.github
 
 ### Read the Docs Documentation
 
-Am utilizat tool-ul [Read the Docs](https://readthedocs.org/).
-Documentatia acestuia este disponibila [aici](https://smart-pots.readthedocs.io/). 
+Am utilizat tool-ul [Read the Docs](https://readthedocs.org).
+Documentatia acestuia este disponibila [aici](https://smart-pots.readthedocs.io). 
 
-Am utilizat [Sphinx](https://www.sphinx-doc.org/en/master/). Codul se poate consulta in folderul [docs](https://github.com/SoftwareEngineerUB/SmartEnergy/tree/main/docs)
+Am utilizat [Sphinx](https://www.sphinx-doc.org/en/master). Codul se poate consulta in folderul [docs](https://github.com/SoftwareEngineerUB/SmartEnergy/tree/main/docs)
 
 Comanda necesare:
 ```sh
