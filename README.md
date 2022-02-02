@@ -164,9 +164,8 @@ Am expus REST API HTTP utilizand Open API Specification - [Swagger](https://swag
 
 ## AsyncAPI
 
-Pentru API MQTT am folosit AsyncAPI [Specification] (https://www.asyncapi.com/docs/specifications/v2.3.0)
-Accesati documentatia [link](https://studio.asyncapi.com/?url=https://raw.githubusercontent.com/asyncapi/asyncapi/v2.2.0/examples/simple
-.yml).
+Pentru API MQTT am folosit AsyncAPI [Specification](https://www.asyncapi.com/docs/specifications/v2.3.0)
+Studio-ul de editare poate fi accesat la acest [link](https://studio.asyncapi.com/?url=https://raw.githubusercontent.com/asyncapi/asyncapi/v2.2.0/examples/simple.yml).
 
 
 ### Read the Docs Documentation
@@ -184,7 +183,7 @@ make html
 
 ## Identificare bug-uri cu RESTler
 
-Am utilizat tool-ul [Restler](https://github.com/microsoft/restler-fuzzer):
+Am utilizat tool-ul [Restler](https://github.com/microsoft/restler-fuzzer).
 
 1. Se face download la repo-ul urmator:
 ```sh
