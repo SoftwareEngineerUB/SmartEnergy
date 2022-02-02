@@ -37,7 +37,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: number
+          type: integer
           format: int32
       responses:
         "200":
@@ -53,7 +53,7 @@ paths:
       operationId: updateDevice
       parameters:
       - name: device
-        in: header
+        in: body
         description: Device
         required: false
         style: simple
@@ -74,7 +74,7 @@ paths:
       operationId: addDevice
       parameters:
       - name: device
-        in: header
+        in: body
         description: Device
         required: false
         style: simple
@@ -101,7 +101,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: number
+          type: integer
           format: int32
       responses:
         "200":
@@ -125,7 +125,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: number
+          type: integer
           format: int32
       - name: page
         in: query
@@ -134,7 +134,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: number
+          type: integer
           format: int32
       - name: per_page
         in: query
@@ -143,7 +143,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: number
+          type: integer
           format: int32
       responses:
         "200":
@@ -159,31 +159,31 @@ paths:
       operationId: addDeviceData
       parameters:
       - name: id
-        in: header
+        in: query
         description: Device id
         required: false
         style: simple
         explode: false
         schema:
-          type: number
+          type: integer
           format: int32
       - name: time
-        in: header
+        in: query
         description: Time and Date
         required: false
         style: simple
         explode: false
         schema:
           type: string
-          format: YYYY-MM-DD HH:MM:SS
+          formate: date
       - name: value
-        in: header
+        in: query
         description: Consumption value
         required: false
         style: simple
         explode: false
         schema:
-          type: number
+          type: integer
           format: int32
       responses:
         "200":
@@ -208,7 +208,7 @@ paths:
         explode: true
         schema:
           type: string
-          format: YYYY-MM-DD HH:MM:SS
+          format: date
       - name: end_time
         in: query
         description: the end date of the given timeframe
@@ -217,7 +217,7 @@ paths:
         explode: true
         schema:
           type: string
-          format: YYYY-MM-DD HH:MM:SS
+          format: date
       - name: device_id
         in: query
         description: the device id for which the prediction is made
@@ -276,7 +276,7 @@ paths:
         explode: true
         schema:
           type: string
-          format: YYYY-MM-DD HH:MM:SS
+          format: date
       - name: device_id
         in: query
         description: the device id for which the prediction is made
@@ -379,7 +379,7 @@ components:
           type: string
           example: FurnaceHRV [kW] mock device
         id:
-          type: number
+          type: integer
           example: 1
         settings:
           type: object
@@ -398,16 +398,16 @@ components:
       type: object
       properties:
         device_id:
-          type: number
+          type: integer
           example: 1
         id:
-          type: number
+          type: integer
           example: 1
         time:
           type: string
           example: 2014-01-01 00:00:00.000000
         value:
-          type: number
+          type: integer
           example: 0.195337778
     DeviceStatistics:
       type: array
@@ -432,10 +432,10 @@ components:
           type: string
           example: Dish washer
         total consumption this month (kW):
-          type: number
+          type: integer
           example: 12.1321
         average daily consumption (kW):
-          type: number
+          type: integer
           example: 0.413
     UnoptimizedDevice_inner:
       type: object
@@ -444,10 +444,10 @@ components:
           type: string
           example: Dish washer
         predicted consumption (kW):
-          type: number
+          type: integer
           example: 12.1321
         real consumption (kW):
-          type: number
+          type: integer
           example: 20.413
         tip:
           type: string
