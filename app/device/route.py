@@ -17,7 +17,7 @@ app_device = Blueprint('device', __name__)
 def generate_train_data():
     """
     Generates the data for training the ML model
-    ----
+    ---
     """
     key = int(request.args.get("key", 0))
     if key != 1234:
@@ -37,10 +37,10 @@ def generate_train_data():
 def predictIsDeviceLeftRunning():
     """
     Returns if the device is presumed left running without a real need
-    ----
+    ---
 
      parameters:
-      - name: device_id
+      name: -device_id
         in: query
         description: the device id for which the prediction is made
         required: false
@@ -71,10 +71,10 @@ def predictIsDeviceLeftRunning():
 def getDeviceConsumptionPrediction():
     """
     Returns the predicted consumption for a device in a given timeframe
-    ----
+    ---
 
     parameters:
-      - name: start_time
+      name: -start_time
         in: query
         description: the start date of the given timeframe
         required: false
@@ -83,7 +83,7 @@ def getDeviceConsumptionPrediction():
         schema:
           type: string
           format: YYYY-MM-DD HH:MM:SS
-      - name: end_time
+      name: -end_time
         in: query
         description: the end date of the given timeframe
         required: false
@@ -92,7 +92,7 @@ def getDeviceConsumptionPrediction():
         schema:
           type: string
           format: YYYY-MM-DD HH:MM:SS
-      - name: device_id
+      name: -device_id
         in: query
         description: the device id for which the prediction is made
         required: false
@@ -101,7 +101,7 @@ def getDeviceConsumptionPrediction():
         schema:
           type: integer
           format: int32
-      responses:
+    responses:
         "200":
           description: The predicted consumption, in kW
           content:
@@ -127,10 +127,10 @@ def getDeviceConsumptionPrediction():
 def getAnomalyCheck():
     """
     Returns True if the consumption profile of a given device in an interval of 6 hours is annormal
-    ----
+    ---
 
     parameters:
-      - name: timestamp
+      name: -timestamp
         in: query
         description: the start date of the 6 hour period for which the consumption is tested
         required: false
@@ -139,7 +139,7 @@ def getAnomalyCheck():
         schema:
           type: string
           format: YYYY-MM-DD HH:MM:SS
-      - name: device_id
+      name: -device_id
         in: query
         description: the device id for which the prediction is made
         required: false
@@ -176,7 +176,7 @@ def getDevices() -> json:
     """
     Returns all devices registered in database
     ---
-    
+
     responses:
         "200":
           description: All devices from database
@@ -190,10 +190,10 @@ def getDevices() -> json:
 def getDevice():
     """
     Return a specific device
-    ----
+    ---
 
     parameters:
-      - name: id
+      name: -id
         in: query
         description: Device id
         required: false
@@ -222,15 +222,14 @@ def addDevice():
     ---
 
     parameters:
-      - name: device
+      name: -device
         in: header
         description: Device
         required: false
         style: simple
         explode: false
-        schema:
-          $ref: '#/components/schemas/Device'
-      responses:
+
+    responses:
         "200":
           description: Newly added device
           content:
@@ -250,14 +249,13 @@ def updateDevice():
     ---
 
     parameters:
-      - name: device
+      name: -device
         in: header
         description: Device
         required: false
         style: simple
         explode: false
-        schema:
-          $ref: '#/components/schemas/Device'
+    
     responses:
         "200":
           description: Newly updated device
@@ -279,10 +277,10 @@ def updateDevice():
 def deleteDevice():
     """
     Delete device from database
-    ----
+    ---
 
     parameters:
-      - name: id
+      name: -id
         in: query
         description: Device id
         required: false
@@ -309,10 +307,10 @@ def deleteDevice():
 def addDeviceData():
     """
     Insert device data in database
-    ----
+    ---
 
     parameters:
-      - name: id
+      name: -id
         in: header
         description: Device id
         required: false
@@ -321,7 +319,7 @@ def addDeviceData():
         schema:
           type: number
           format: int32
-      - name: time
+      name: -time
         in: header
         description: Time and Date
         required: false
@@ -330,7 +328,7 @@ def addDeviceData():
         schema:
           type: string
           format: YYYY-MM-DD HH:MM:SS
-      - name: value
+      name: -value
         in: header
         description: Consumption value
         required: false
@@ -362,10 +360,10 @@ def addDeviceData():
 def getDeviceData():
     """
     Get device data
-    ----
+    ---
 
     parameters:
-      - name: id
+      name: -id
         in: query
         description: Device id
         required: false
@@ -374,7 +372,7 @@ def getDeviceData():
         schema:
           type: number
           format: int32
-      - name: page
+      name: -page
         in: query
         description: Page id
         required: false
@@ -383,7 +381,7 @@ def getDeviceData():
         schema:
           type: number
           format: int32
-      - name: per_page
+      name: -per_page
         in: query
         description: Items per page
         required: false
@@ -392,7 +390,7 @@ def getDeviceData():
         schema:
           type: number
           format: int32
-      responses:
+    responses:
         "200":
           description: Device details
           content:

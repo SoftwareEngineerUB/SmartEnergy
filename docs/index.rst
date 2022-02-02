@@ -30,7 +30,7 @@ Technologies Used
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: ***Contents:***
 
    pages/features
    pages/requirements
