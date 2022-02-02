@@ -1,104 +1,191 @@
-## Document de analiză a cerințelor clientului
+<!-- README template used: https://github.com/othneildrew/Best-README-Template -->
 
-### Scopul aplicației: 
-
-*În contextul actualei crize de mediu și al încălzirii globale dorim eficientizarea consumului de energiei pentru a contribui la eliminarea poluării. Astfel, echipa noastra propune un program IoT al cărui scop este de a interacționa cu device-urile smart dintr-o locuință pentru a eficientiza energia consumată. În acest sens programul ar putea fi implementat pe o sursa smart de energie (sau pe distribuitori de energie precum un prelungitor) electrica unde ar urma sa comunice cu restul de device-uri smart cu scopul de a realiza statistici și a efectua acțiuni ce vor diminua consumul de energie.*
-
-### Obiectivele aplicației:
-
-*Un prim obiectiv în realizarea acestui program este acela de a crea endpointuri la care se pot conecta și trimite informații senzorii de pe device (cei de intensitatea curentului și puterea folosită) și de endpointuri prin care acesta sa poată comunica cu obiectele smart pe care le alimentează.*
-
-*Un alt obiectiv important este acela de a crea statistici pe baza datelor obținute și de trimiterea lor sub formă de rapoarte către utilizator. De asemenea, se pot genera sugestii de reducere a consumului prin interpolarea statisticilor cu obiceiurile utilizatorului.*
-
-*În continuarea funcționalității de statistica, avem în obiectiv crearea de alerte prin care device-ul îl poate înștiința pe utilizator de consumuri nedorite de energie, un exemplu fiind un device uitat pornit, și de a îi permite închiderea acestora prin întreruperea curentului în porturile corespunzătoare.*
-
-*Un selling point al device-ului îl poate forma și abilitatea de a detecta anomalii de consum, permitand astfel device-ului sa instiinteze utilizatorul despre funcționarea inadecvată a echipamentelor sau despre posibilele pericole (un scurtcircuit, cabluri inadecvate, etc.)*
-
-*Astfel, device-ul se bazează pe generarea de informații ce permit utilizatorului să fie mai eficient în consumul de energie electrică și în același timp să prevină diverse probleme ce pot apărea în funcționarea acestora.*
-
-### Grupul țintă
-
-*Aplicatia este destinata utilizatorilor ce doresc sa eficientizeze consumul de energie, in special utilizatorilor de device-uri smart intrucat acestea permit interactiunea de la distanta cu user-ul. Identificam mai multe tipologii de utilizatori, iar pentru fiecare aducem solutii avantajoase.*
-
-*Un prim tip de utilizatori sunt cei care doresc sa isi micsoreze consumul de energie dar intr-un mod autonom, fara prea multa implicare. Astfel, functia de inchidere automata a curentului pentru diverse device-uri este potrivita pentru acesti useri.*
-
-*Pentru cei care doresc informatii mai detaliate despre obiceiurile lor de consum functiile de statistici si alerte le sunt foarte potrivite, avand posibilitatea de a-si invata propriile obiceiuri si de a analiza posibilele metode de reducere a consumului.*
-
-*În același timp, aceste tipuri de utilizatori beneficiază și de feature-ul răspunzător de pornirea și oprirea automată a diverșilor consumatori în funcție de momentul din zi în care se afla.*
-
-*De asemenea, identificăm un alt segment important și anume firmele, ce ar fi interesate îndeosebi de feature-urile de pornire/oprire automată a anumitor device-uri in functie de perioada corespunzatoare din zi și de statisticile de consum pentru a-și reduce costurile.*
-
-### Colectarea cerințelor
-
- - [x] Detectarea valorilor anormale a device-urilor 
- - [x] Monitorizarea consumului device-urilor conectate
- - [ ] Comunicarea dintre mai multe device-uri care se afla in aceeasi cladire 
- - [x] Alertarea utilizatorilor asupra utilizarii energiei in mod ineficient.
- - [x] Interactiune automata - inchidere si pornirea device-urilor in functie de setarile utilizatorului 
- - [x] Sfaturi de micsorare a consumului
- - [ ] Invatare automata a obiceiurilor utilizatorului pentru a interactiona cu device-urile si a reduce consumul
- - [ ] Conectarea cu alte device-uri smart pentru a prelua informatii de utilizare a acestora
- - [ ] Eficientizarea operatiilor pentru a reduce energia consumata de catre sursa
-
-### Interpretarea si prioritizarea cerintelor
-Cerinte functionale:
-* Detectarea valorilor anormale a device-urilor
-* Interactiune automata - inchidere si pornirea device-urilor in functie de setarile utilizatorului
-* Monitorizarea consumului device-urilor conectate
-* Alertarea utilizatorilor asupra utilizarii energiei in mod ineficient.
-* Sfaturi de micsorare a consumului
-
-Cerinte nefunctionale:
-* Comunicarea dintre mai multe device-uri care se afla in aceeasi cladire 
-* Conectarea cu alte device-uri smart pentru a prelua informatii de utilizare a acestora
-* Eficientizarea operatiilor pentru a reduce energia consumata de catre sursa
-* Invatare automata a obiceiurilor utilizatorului pentru a interactiona cu device-urile si a reduce consumul 
-
-### Gruparea cerintelor
-Devops - self-explanatory
-- Initializare Hosting
-- Initializare baza de date
-
-Data Transfer - cerinte ce tin de transmiterea, validarea si stocarea de date
-- Implementare Flask MQTT
-- Implementare Flask HTTP
-- Preluare date device-uri
-
-Data Processing - cerinte ce tin de prelucrarea si monitorizarea de date:
-- Detectarea valorilor anormale a device-urilor
-- Monitorizarea consumului device-urilor conectate 
-- Alertarea utilizatorilor asupra utilizarii energiei in mod ineficient
-
-Automatic interaction - cerinte ce includ detectarea si interactiunea automata 
-- Invatarea automata a obiceiurilor utilizatorului 
-- Detectarea valorilor anormale a device-urilor 
-- Alertarea utilizatoriilor asupra utilizarii energiei in mod ineficient
+<!-- PROJECT SHIELDS -->
+[![Contributors][contributors-shield]][contributors-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
 
 
-### Planning Poker results
+<h3 align="center">Smart Energy</h3>
+  <p align="center">
+    Efficient usage of limited sources of energy for unlimited posibilities.
+  </p>
 
-| *P = Prioritate;  *D = Dificultate; 5 = max priority / dif                                                   | Johnny P/D | Alexandra P/D | Darius P/D | Ștefan P/D | Andrei P/D | Călin  P/D |
-|------------------------------------------------------------------------------------------------------------|:----------:|:-------------:|:----------:|:----------:|:----------:|:----------:|
-| Comunicarea dintre mai multe device-uri care se afla in aceeasi cladire                                    |     4/3    |      4/4      |     4/4    |     2/4    |     3/4    |     4/4    |
-| Invatare automata a obiceiurilor utilizatorului pentru a interactiona cu device-urile si a reduce consumul |     5/2    |      5/3      |     4/5    |     3/5    |     4/5    |     3/5    |
-| Conectarea cu alte device-uri smart pentru a prelua informatii de utilizare a acestora                     |     3/3    |      3/3      |     3/3    |     3/4    |     3/4    |     3/3    |
-| Eficientizarea operatiilor pentru a reduce energia consumata de catre sursa                                |     3/4    |      3/4      |     3/4    |     4/3    |     3/3    |     4/3    |
-| Detectarea valorilor anormale a device-urilor                                                              |     3/4    |      4/3      |     3/3    |     4/3    |     4/2    |     4/2    |
-| Interactiune automata - inchidere si pornirea device-urilor in functie de setarile utilizatorului          |     4/2    |      4/2      |     4/2    |     3/3    |     4/1    |     5/1    |
-| Monitorizarea consumului device-urilor conectate                                                           |     4/3    |      4/3      |     4/2    |     4/2    |     4/3    |     5/3    |
-| Alertarea utilizatorilor asupra utilizarii energiei in mod ineficient.                                     |     3/2    |      3/2      |     3/3    |     3/3    |     3/1    |     3/1    |
-| Sfaturi de micsorare a consumului                                                                          |     3/3    |      2/2      |     4/4    |     2/2    |     2/1    |     3/2    |
 
-### Prioritatea cerințelor
-![alt text](https://github.com/SoftwareEngineerUB/SmartEnergy/blob/main/tasks.png)
+<!-- ABOUT THE PROJECT -->
+## Despre proiect
+În contextul actualei **crize de mediu** și al încălzirii globale, echipa noastra propune un program **IoT** al cărui scop este de a interacționa cu device-urile smart dintr-o locuință pentru a **eficientiza energia consumată**. În acest sens programul ar putea fi implementat pe o sursa smart de energie (sau pe distribuitori de energie precum un prelungitor) electrica unde ar urma sa comunice cu restul de device-uri smart cu scopul de a realiza **statistici** și a efectua acțiuni ce vor diminua consumul de energie.
 
-### Echipa
- - Darius Buhai
- - Savu Ioan Daniel
- - Alexandra Bulaceanu
- - Rusu Andrei Cristian
- - Mitoi Stefan-Daniel
- - Stanciu Andrei-Calin
+Documentatia proiectului poate fi accesata aici: [Documentatie](https://smartenergy.readthedocs.io/en/latest/index.html).
 
-### Link Aplicatie
-[https://smart-energy-ub.herokuapp.com/](https://smart-energy-ub.herokuapp.com/)
+Informatii detaliate despre proiect pot fi consultate in cadrul paginii wiki: [Documentului de analiza](https://github.com/SoftwareEngineerUB/SmartEnergy/wiki/Document-de-Analiza-a-aplicatiei-SmartEnergy).
+
+### Tool-uri folosite
+
+* [Flask](https://flask.palletsprojects.com/en/2.0.x/)
+* [Flask-MQTT](https://flask-mqtt.readthedocs.io/en/latest/)
+* [SQLite](https://www.sqlite.org/index.html)
+* [Mosquitto](https://mosquitto.org/)
+* [pytest](https://docs.pytest.org/en/6.2.x/)
+
+
+## Instructiuni de instalare
+
+#############
+Prerequisites
+#############
+
+Este necesar python3..
+Se poate downloada `aici <https://www.python.org/downloads/>`_. 
+De asemenea `package manager-ul pip <https://pypi.org/project/pip/>`_ trebuie si el instalat.
+
+**********************************
+Mosquitto MQTT Broker
+**********************************
+
+Pentru instalare Mosquitto MQTT Broker, se utilizeaza `official page <https://mosquitto.org/download/>`_ si se selecteaza versiunea corespunzatoare sistemului de operare utilizat.
+
+
+For Ubuntu:
+===========
+Rulam comanda de instalare:
+::
+    sudo apt-get install mosquitto
+
+Porinim serviciul:
+::
+    sudo systemctl start mosquitto
+Verificam daca ruleaza serviciul:
+::
+    sudo systemctl status mosquitto
+
+For Mac: 
+========
+Se foloseste Homebrew si se instaleaza serviciul:
+::
+    brew install mosquitto
+
+
+############
+Instalare
+############
+
+
+1. Se creaza un virtual environment:
+
+Pe Linux:
+Instalare:
+::
+    sudo pip install virtualenv
+In interiorul folderul-ui de proiect se creaza env-ul
+::
+    cd SmartEnergy/
+    virtualenv .venv
+
+In loc de venv, se poate utiliza orice alt nume pentru identificarea virtual env
+
+Activam mediul creat:
+::
+    source .venv/bin/activate
+
+In acest punct ar trebui sa fie activat in linia de comanda.
+Dezactivare:
+::
+    deactivate
+
+2. Instalam dependintele
+::
+    pip install -r requirements.txt
+
+3. Initializam baza de date:
+::
+    python3 app/util/database.py
+
+
+## Intructiuni de rulare si utilizare
+
+
+
+### Read the Docs Documentation
+
+Am utilizat tool-ul [Read the Docs](https://readthedocs.org/).
+Documentatia acestuia este disponibila [aici](https://smart-pots.readthedocs.io/). 
+
+Am utilizat [Sphinx](https://www.sphinx-doc.org/en/master/). Codul se poate consulta in folderul [docs](https://github.com/SoftwareEngineerUB/SmartEnergy/tree/main/docs)
+
+Comanda necesare:
+```sh
+make html
+```
+
+
+## Identificare bug-uri cu RESTler
+
+Am utilizat tool-ul [Restler](https://github.com/microsoft/restler-fuzzer):
+
+1. Se face download la repo-ul urmator:
+```sh
+git clone https://github.com/microsoft/restler-fuzzer.git && cd restler-fuzzer
+```
+
+2. Se creaza un restler_bin
+```sh
+mkdir ../restler_bin
+```
+
+3. Se da build la acest folder
+```sh
+python ./build-restler.py --dest_dir ../restler_bin
+```
+
+4. Se sterge repo-ul
+```sh
+cd .. && rm restler-fuzzer
+```
+
+5. Ne mutam in directorul restler_bin
+```sh
+cd restler_bin
+```
+
+6. Compilam fisierle necesare pentru Restler
+```sh
+dotnet ./restler/Restler.dll compile --api_spec ./swagger.json
+```
+
+7. Se ruleaza
+```sh
+dotnet ./restler/Restler.dll test --grammar_file grammar.py --dictionary_file dict.json --settings engine_settings.json --no_ssl
+```
+
+
+## Licenta
+
+Utilizam Apache-2.0 License. Accesati `LICENSE` pentru mai multe informatii.
+
+
+## Contributii
+
+Proiectul este open-source, ceea ce inseamna ca incurajam orice contributie.
+
+
+## Surse de informare
+The following list includes resources we found helpful and would like to give credit to:
+* 
+* [How to Write Your First AsyncAPI Specification](https://nordicapis.com/how-to-write-your-first-asyncapi-specification/)
+* 
+* [How to Set Up Your Python Project Docs for Success🎉](https://towardsdatascience.com/how-to-set-up-your-python-project-docs-for-success-aab613f79626)
+
+<!-- MARKDOWN LINKS & IMAGES -->
+[contributors-shield]: https://img.shields.io/github/contributors/SoftwareEngineerUB/SmartEnergy.svg?style=for-the-badge
+[contributors-url]: https://github.com/SoftwareEngineerUB/SmartEnergy/graphs/contributors
+
+[stars-shield]: https://img.shields.io/github/stars/SoftwareEngineerUB/SmartEnergy.svg?style=for-the-badge
+[stars-url]: https://github.com/SoftwareEngineerUB/SmartEnergy/stargazers
+
+[issues-shield]: https://img.shields.io/github/issues/SoftwareEngineerUB/SmartEnergy.svg?style=for-the-badge
+[issues-url]: https://github.com/SoftwareEngineerUB/SmartEnergy/issues
+
+[license-shield]: https://img.shields.io/github/license/SoftwareEngineerUB/SmartEnergy.svg?style=for-the-badge
+[license-url]: https://github.com/SoftwareEngineerUB/SmartEnergy/blob/main/LICENSE
