@@ -32,79 +32,132 @@ Informatii detaliate despre proiect pot fi consultate in cadrul paginii wiki: [D
 
 ## Instructiuni de instalare
 
-#############
-Prerequisites
-#############
+
+## Prerequisites
+
 
 Este necesar python3..
 Se poate downloada `aici <https://www.python.org/downloads/>`_. 
 De asemenea `package manager-ul pip <https://pypi.org/project/pip/>`_ trebuie si el instalat.
 
-**********************************
-Mosquitto MQTT Broker
-**********************************
+
+## Mosquitto MQTT Broker
+
 
 Pentru instalare Mosquitto MQTT Broker, se utilizeaza `official page <https://mosquitto.org/download/>`_ si se selecteaza versiunea corespunzatoare sistemului de operare utilizat.
 
 
-For Ubuntu:
-===========
+## Pentru Ubuntu:
+
 Rulam comanda de instalare:
-::
+```sh
     sudo apt-get install mosquitto
+```
 
 Porinim serviciul:
-::
+```sh
     sudo systemctl start mosquitto
+```
 Verificam daca ruleaza serviciul:
-::
+```sh
     sudo systemctl status mosquitto
+```
 
-For Mac: 
-========
+## Pentru Mac: 
+
 Se foloseste Homebrew si se instaleaza serviciul:
-::
+```sh
     brew install mosquitto
+```
 
 
-############
-Instalare
-############
+## Instalare
 
 
 1. Se creaza un virtual environment:
 
 Pe Linux:
 Instalare:
-::
+```sh
     sudo pip install virtualenv
+```
 In interiorul folderul-ui de proiect se creaza env-ul
-::
+```sh
     cd SmartEnergy/
     virtualenv .venv
+```
 
 In loc de venv, se poate utiliza orice alt nume pentru identificarea virtual env
 
 Activam mediul creat:
-::
+```sh
     source .venv/bin/activate
+```
 
 In acest punct ar trebui sa fie activat in linia de comanda.
 Dezactivare:
-::
+```sh
     deactivate
+```
 
 2. Instalam dependintele
-::
+```sh
     pip install -r requirements.txt
+```
 
 3. Initializam baza de date:
-::
+```sh
     python3 app/util/database.py
-
+```
 
 ## Intructiuni de rulare si utilizare
 
+
+## Rulare pe Linux
+
+1. **Pornire MQTT Broker**.
+
+We use Mosquitto to run it:
+```sh
+    sudo service mosquitto start
+```
+
+Pnetru a vederea daca ruleaza serviciul `netstat –at`.
+
+Pentru a-l opri `sudo service mosquitto stop`.
+
+2. **Rulare aplicatie**
+
+```sh
+    $ python3 wsgi.py
+```
+
+
+## Testare
+
+Pentru rularea testelor si obtinerea coverage-ului:
+```sh
+    $ coverage run -m pytest
+```
+Pentru generarea unui raport de coverage:
+```sh
+    $ coverage report
+```
+
+
+## Developer Tools
+
+
+## OpenAPI
+
+Am expus REST API HTTP utilizand Open API Specification - [Swagger](https://swagger.io/specification/). 
+
+
+## AsyncAPI
+
+Pentru API MQTT am folosit AsyncAPI [Specification] (https://www.asyncapi.com/docs/specifications/v2.3.0)
+Accesati documentatia [link](https://studio.asyncapi.com/?url=https://raw.githubusercontent.com/asyncapi/asyncapi/v2.2.0/examples/simple
+.yml).
 
 
 ### Read the Docs Documentation
@@ -172,9 +225,8 @@ Proiectul este open-source, ceea ce inseamna ca incurajam orice contributie.
 
 ## Surse de informare
 The following list includes resources we found helpful and would like to give credit to:
-* 
+
 * [How to Write Your First AsyncAPI Specification](https://nordicapis.com/how-to-write-your-first-asyncapi-specification/)
-* 
 * [How to Set Up Your Python Project Docs for Success🎉](https://towardsdatascience.com/how-to-set-up-your-python-project-docs-for-success-aab613f79626)
 
 <!-- MARKDOWN LINKS & IMAGES -->
