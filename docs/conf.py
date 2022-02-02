@@ -56,7 +56,7 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 rst_epilog = """
-.. |smartenergy_img| image:: https://iili.io/lZLtR9.png
-            :width: 293
+.. |smartenergy_img| image:: https://ibb.co/zJmLp8T
+            :width: 200
             :alt: smartenergy
 """

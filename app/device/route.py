@@ -74,7 +74,7 @@ def getDeviceConsumptionPrediction():
     ---
 
     parameters:
-      name: -start_time
+      start_time: name
         in: query
         description: the start date of the given timeframe
         required: false
@@ -83,7 +83,7 @@ def getDeviceConsumptionPrediction():
         schema:
           type: string
           format: YYYY-MM-DD HH:MM:SS
-      name: -end_time
+      end_time: name
         in: query
         description: the end date of the given timeframe
         required: false
@@ -92,7 +92,7 @@ def getDeviceConsumptionPrediction():
         schema:
           type: string
           format: YYYY-MM-DD HH:MM:SS
-      name: -device_id
+      device_id: name
         in: query
         description: the device id for which the prediction is made
         required: false
@@ -130,7 +130,7 @@ def getAnomalyCheck():
     ---
 
     parameters:
-      name: -timestamp
+      timestamp: name
         in: query
         description: the start date of the 6 hour period for which the consumption is tested
         required: false
@@ -139,7 +139,7 @@ def getAnomalyCheck():
         schema:
           type: string
           format: YYYY-MM-DD HH:MM:SS
-      name: -device_id
+      device_id: name
         in: query
         description: the device id for which the prediction is made
         required: false
@@ -193,7 +193,7 @@ def getDevice():
     ---
 
     parameters:
-      name: -id
+      id: name
         in: query
         description: Device id
         required: false
@@ -222,8 +222,8 @@ def addDevice():
     ---
 
     parameters:
-      name: -device
-        in: header
+      header: - name, in
+        in: name
         description: Device
         required: false
         style: simple
@@ -249,7 +249,7 @@ def updateDevice():
     ---
 
     parameters:
-      name: -device
+      device: name
         in: header
         description: Device
         required: false
@@ -280,7 +280,7 @@ def deleteDevice():
     ---
 
     parameters:
-      name: -id
+      id: name
         in: query
         description: Device id
         required: false
@@ -310,7 +310,7 @@ def addDeviceData():
     ---
 
     parameters:
-      name: -id
+      id: name
         in: header
         description: Device id
         required: false
@@ -319,7 +319,7 @@ def addDeviceData():
         schema:
           type: number
           format: int32
-      name: -time
+      time: name
         in: header
         description: Time and Date
         required: false
@@ -328,7 +328,7 @@ def addDeviceData():
         schema:
           type: string
           format: YYYY-MM-DD HH:MM:SS
-      name: -value
+      value: name
         in: header
         description: Consumption value
         required: false
@@ -337,7 +337,7 @@ def addDeviceData():
         schema:
           type: number
           format: int32
-      responses:
+    responses:
         "200":
           description: True or False if the device data has been inserted successfully
           content:
@@ -363,7 +363,7 @@ def getDeviceData():
     ---
 
     parameters:
-      name: -id
+      id: name
         in: query
         description: Device id
         required: false
@@ -372,7 +372,7 @@ def getDeviceData():
         schema:
           type: number
           format: int32
-      name: -page
+      page: name
         in: query
         description: Page id
         required: false
@@ -381,7 +381,7 @@ def getDeviceData():
         schema:
           type: number
           format: int32
-      name: -per_page
+      per_page: name
         in: query
         description: Items per page
         required: false
