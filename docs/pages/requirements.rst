@@ -6,7 +6,7 @@ Installation
 Prerequisites
 #############
 
-:You need to have python3 installed. 
+You need to have python3 installed.
 Download it `here <https://www.python.org/downloads/>`_. 
 Also make sure you also have `pip package manager <https://pypi.org/project/pip/>`_ installed.
 
