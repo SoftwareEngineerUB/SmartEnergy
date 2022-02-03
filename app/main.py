@@ -29,6 +29,6 @@ def initiateFlask(testing=False):
     MqttHub.handle.initialize_scheduler()
 
     # Start watching mqtt endpoints
-    MqttHub.handle.watch_clients()
+    # MqttHub.handle.watch_clients()
 
     return app

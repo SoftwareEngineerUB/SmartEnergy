@@ -6,4 +6,4 @@ if __name__ == "__main__":
 
     # Initiate socket IO app - flask
     socketio = SocketIO(app)
-    socketio.run(app, host='localhost', port=5000, use_reloader=True, debug=True)
+    socketio.run(app, host='localhost', port=8080, use_reloader=True, debug=True)
